@@ -20,7 +20,7 @@ function createWindow() {
   if (app.isPackaged) {
     window.loadFile(path.join(__dirname, "../../dist/index.html"));
   } else {
-    window.loadURL(process.env.VITE_DEV_SERVER_URL || "http://localhost:5173");
+    window.loadURL(process.env.VITE_DEV_SERVER_URL || "http://localhost:5174");
     window.webContents.openDevTools({ mode: "detach" });
   }
 
