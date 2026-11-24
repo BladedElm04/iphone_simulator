@@ -86,8 +86,8 @@ export default function App() {
 
       <section className="stage">
         <div className="stage-heading">
-          <div><span className="eyebrow">DEVICE PREVIEW</span><h1>{device}</h1><p>Interactive iOS-inspired environment</p></div>
-          <div className="stage-status"><span className="online-dot" />Simulator ready</div>
+          <div><span className="eyebrow">DEVICE PREVIEW</span><h1>{device}</h1><p>Interface preview — no iOS runtime connected</p></div>
+          <div className="stage-status"><span className="online-dot" />UI preview only</div>
         </div>
 
         <div className="device-area">
@@ -165,7 +165,7 @@ export default function App() {
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
           <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setLocked(false); }}><AppWindow size={16} />Go to Home Screen</button>
         </section>
-        <section className="inspector-section"><h3>Runtime Status</h3><div className="runtime-status"><span className="online-dot" />Interface running</div><p>Browser runtime and native app execution are not connected yet.</p></section>
+        <section className="inspector-section"><h3>Runtime Status</h3><div className="runtime-status"><span className="online-dot" />Preview running</div><p>This preview does not boot iOS or execute native iOS apps. Connect a supported runtime to test real applications.</p></section>
         <footer className="inspector-footer"><span>iPhone Simulator</span><span>Build 0.1.0</span></footer>
       </aside>
     </main>
