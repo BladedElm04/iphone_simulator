@@ -26,3 +26,12 @@
 .control-center{position:absolute;z-index:9;inset:0;padding:55px 17px 30px;background:#172033ef;backdrop-filter:blur(25px);color:white}.control-heading{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-bottom:18px}.control-heading button{border:0;background:#ffffff20;color:white;border-radius:50%;width:26px;height:26px;display:grid;place-items:center}.control-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.control-grid div{height:66px;border-radius:13px;background:#ffffff22;display:flex;align-items:center;gap:9px;padding:12px;font-size:9px}.control-grid svg{width:17px}.lock-button{margin-top:17px;padding:10px 13px;border:1px solid #ffffff40;border-radius:9px;background:#ffffff1c;color:white;font-size:10px}
 .lock-screen{position:absolute;z-index:2;inset:0;padding-top:125px;text-align:center;background:#11182722;display:flex;align-items:center;flex-direction:column;cursor:pointer}.lock-screen span{font-size:12px;color:#ffffffd9}.lock-screen strong{font-size:66px;letter-spacing:-4px;font-weight:300;margin-top:4px}.lock-screen small{position:absolute;bottom:45px;font-size:10px;color:#ffffffc9}
 @media(max-width:1100px){.workspace{grid-template-columns:minmax(0,1fr) 250px}.stage{padding-left:15px;padding-right:15px}.toolbar{padding:0 17px}}
+
+/* Browser preview and device orientation */
+.device-frame.landscape{width:625px;height:302px;border-radius:48px;}
+.device-frame.landscape .device-bezel{border-radius:42px;}
+.device-frame.landscape .screen{border-radius:38px;}
+.browser-content{padding:0;gap:10px;overflow:hidden;}
+.browser-viewport{width:100%;height:100%;min-height:0;flex:1;border:0;background:#fff;}
+.browser-note{flex:0 0 auto;margin:0 12px 12px;}
+@media(max-width:1100px){.device-frame.landscape{width:min(625px,calc(100vw - 330px));height:auto;aspect-ratio:625/302;}}
