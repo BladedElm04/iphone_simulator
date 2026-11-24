@@ -2,7 +2,8 @@ export type RuntimeId =
   | "local-web-preview"
   | "apple-simulator"
   | "appetize"
-  | "browserstack";
+  | "browserstack"
+  | "touchhle-legacy";
 
 export type RuntimeAvailability =
   | "available"
@@ -12,6 +13,7 @@ export type RuntimeAvailability =
 
 export type RuntimeCapability =
   | "web-preview"
+  | "legacy-ipa-run"
   | "simulator-app-install"
   | "ipa-install"
   | "app-store-install"
