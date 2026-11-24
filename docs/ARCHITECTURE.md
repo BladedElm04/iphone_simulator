@@ -8,6 +8,7 @@ The Electron application owns the desktop experience. Actual iOS execution is de
 
 - **Apple Simulator runtime:** runs on macOS through Xcode.
 - **Cloud device providers:** remote simulators or real iPhones, subject to provider capabilities and account limits.
+- **Legacy compatibility runtime:** touchHLE can run a limited subset of early 32-bit iPhone OS apps; it is not a modern iOS simulator and does not provide App Store access.
 - **Local web preview:** a responsive interface preview only; it is not an iOS runtime.
 
 ## Application layers
@@ -32,6 +33,7 @@ A provider must report unsupported capabilities explicitly. In particular, App S
 | Apple Simulator | Execute Simulator-compatible builds | macOS + Xcode required |
 | Appetize | Hosted iOS Simulator sessions | Provider plan and supported build format apply |
 | BrowserStack App Live | Real-device sessions, App Store and IPA workflows | Cloud account and paid-plan limits may apply |
+| touchHLE | Selected early 32-bit iPhone OS apps | Legacy decrypted app binaries only; not modern iOS or App Store |
 | Mac Bridge | Connect this desktop client to a user's Mac | Optional companion; requires macOS and Xcode |
 
 ## Security boundaries
