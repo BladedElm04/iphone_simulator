@@ -4,15 +4,16 @@
   "private": true,
   "description": "An open-source iPhone-inspired environment for web application testing.",
   "license": "MIT",
+  "main": "apps/desktop/electron.cjs",
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "pnpm dev:web",
     "dev:web": "vite --host 0.0.0.0",
     "dev:desktop": "concurrently -k \"vite --host 0.0.0.0\" \"wait-on http://localhost:5173 && electron apps/desktop/electron.cjs\"",
-    "build:web": "tsc -b && vite build",
+    "build:web": "tsc --noEmit && vite build",
     "build:desktop": "pnpm build:web && electron-builder",
     "preview": "vite preview --host 0.0.0.0",
-    "typecheck": "tsc -b --pretty"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",
@@ -35,7 +36,7 @@
     "appId": "com.iphonesimulator.desktop",
     "productName": "iPhone Simulator",
     "directories": { "output": "release" },
-    "files": ["dist/**/*", "apps/desktop/**/*"],
+    "files": ["dist/**/*", "apps/desktop/**/*", "package.json"],
     "win": { "target": ["nsis"] }
   }
 }
