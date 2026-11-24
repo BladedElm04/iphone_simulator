@@ -8,11 +8,14 @@
 - [x] Lock screen and Control Center prototype
 
 ## 0.2 — Browser testing
-- [ ] Real browser surface
-- [ ] URL navigation and history
-- [ ] Localhost testing
-- [ ] Browser session isolation
+- [x] Embedded website preview
+- [x] URL navigation
+- [x] Portrait and landscape orientation controls
+- [ ] Full browser engine integration for desktop
+- [ ] Browser history and session isolation
 - [ ] Device viewport profiles
+
+> The embedded web preview uses an iframe. Websites that deny framing through security headers may not render. This is not Safari or WebKit.
 
 ## 0.3 — Developer tools
 - [ ] Playwright integration
@@ -24,7 +27,7 @@
 - [ ] Installable web apps (PWA)
 - [ ] Persisted app registry
 - [ ] Device profile editor
-- [ ] Orientation controls
+- [x] Orientation controls
 
 ## 0.5 — Desktop distribution
 - [ ] Validate Windows installer
