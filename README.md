@@ -1,28 +1,38 @@
 # iPhone Simulator
 
-An open-source, cross-platform iPhone-inspired environment for web application testing.
+An open-source, Windows-first desktop client for managing mobile web previews and real iOS testing environments.
 
-> **Compatibility note:** This project recreates selected mobile-device interactions for development and testing. It is not Apple's iOS, does not include proprietary Apple software, and does not run native iOS `.ipa` applications. Native iOS testing requires Apple's official tooling and supported hardware.
+> **Important:** This application does not emulate iOS. Windows and WSL cannot run Apple's official iOS Simulator or execute arbitrary App Store apps locally. Real iOS execution must be delegated to macOS/Xcode, a compatible cloud simulator, or hosted physical iPhones.
 
 ## Project status
 
-**Early development — UI prototype**
+**Early development — UI prototype and runtime foundation**
 
-- Responsive simulator workspace
-- iPhone-inspired home screen, status bar, Dynamic Island, and dock
-- Interactive built-in app placeholders
-- Device profile selector
-- Control Center and lock-screen interactions
-- Web and Electron desktop entry points
+- iPhone-inspired device preview and desktop workspace
+- Interactive home screen, app placeholders, Control Center, and lock-screen preview
+- Embedded website preview (not Safari or WebKit)
+- Provider-neutral runtime contracts and capability catalog
+- Planned Apple Simulator, Appetize, and BrowserStack integrations
 
-The in-simulator browser now supports website navigation through an embedded browser frame. Some websites block iframe embedding through their security headers, so this preview is not a replacement for a full browser engine. The workspace supports portrait and landscape device orientations.
+The current device shell is a visual interface preview. It must not be treated as a running iOS device. The runtime catalog reports this distinction and describes the requirements and limitations of each planned execution provider.
+
+## Runtime strategy
+
+| Runtime | What it provides | Requirements |
+|---|---|---|
+| Local Web Preview | Responsive website preview | Windows, Linux, or macOS |
+| Apple Simulator | Native iOS Simulator app testing | macOS and Xcode |
+| Appetize | Hosted sessions for supported Simulator builds | Provider account and available quota |
+| BrowserStack App Live | Hosted real iPhones, including supported IPA and App Store workflows | Provider account; ongoing use may require a paid plan |
+
+A Simulator-built `.app` and a device `.ipa` are different artifacts. Neither can be launched directly by Windows or WSL as a native iOS application.
 
 ## Tech stack
 
 - React, TypeScript, and Vite
 - Electron for the desktop shell
-- Playwright for planned browser automation
-- pnpm workspaces
+- pnpm
+- Playwright planned for web-preview automation
 
 ## Requirements
 
@@ -51,17 +61,19 @@ pnpm build:web
 pnpm build:desktop
 ```
 
-## Roadmap
+## Roadmap and architecture
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- [Roadmap](docs/ROADMAP.md)
+- [Architecture](docs/ARCHITECTURE.md)
 
 ## Principles
 
 - English-only UI, documentation, identifiers, and code comments.
 - TypeScript-first development.
 - Keep privileged desktop capabilities isolated from web content.
-- Be explicit about browser-engine and native iOS compatibility limitations.
-- Prefer small, testable modules over a monolithic simulator implementation.
+- Never report a preview as a real iOS runtime.
+- Keep provider-specific behavior behind shared runtime contracts.
+- Prefer small, testable modules over a monolithic implementation.
 
 ## License
 
