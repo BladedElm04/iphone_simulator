@@ -15,7 +15,7 @@ An open-source, cross-platform iPhone-inspired environment for web application t
 - Control Center and lock-screen interactions
 - Web and Electron desktop entry points
 
-The in-simulator browser is currently a prototype UI. Real website rendering, local development URL support, device emulation, and automated testing are planned next.
+The in-simulator browser now supports website navigation through an embedded browser frame. Some websites block iframe embedding through their security headers, so this preview is not a replacement for a full browser engine. The workspace supports portrait and landscape device orientations.
 
 ## Tech stack
 
@@ -36,7 +36,7 @@ pnpm install
 pnpm dev:web
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Open [http://localhost:5174](http://localhost:5174).
 
 Run the Electron shell:
 
