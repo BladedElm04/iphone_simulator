@@ -1,9 +1,15 @@
 import { useState } from "react";
+import type { ComponentType, HTMLAttributes } from "react";
 import {
   Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, MessageCircle, Music2, Phone, Search,
   Settings, Smartphone, Wifi, X
 } from "lucide-react";
+
+type ElectronWebviewProps = HTMLAttributes<HTMLElement> & { src: string; partition: string; webpreferences: string };
+const ElectronWebview = "webview" as unknown as ComponentType<ElectronWebviewProps>;
+
+const isDesktopElectron = Boolean((window as Window & { desktopRuntime?: { isElectron: boolean } }).desktopRuntime?.isElectron);
 
 type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music";
 
@@ -124,7 +130,22 @@ export default function App() {
                     {activeApp === "safari" ? (
                       <div className="browser-app">
                         <div className="browser-address"><Lock size={12} /><input value={address} onChange={(event) => setAddress(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") navigate(); }} aria-label="Website address" /><button onClick={navigate} aria-label="Go to website"><Search size={14} /></button><button onClick={() => setBrowserReloadKey((value) => value + 1)} aria-label="Reload website"><Activity size={14} /></button></div>
-                        <div className="browser-content"><iframe key={browserReloadKey} className="browser-viewport" src={browserUrl} title="Safari website preview" /><span className="browser-note">Some websites block embedding in other pages. If a site does not appear, its security policy may prohibit iframe previews.</span></div>
+                        <div className="browser-content">
+                          {isDesktopElectron ? (
+                            <ElectronWebview
+                              key={browserReloadKey}
+                              className="browser-viewport"
+                              src={browserUrl}
+                              partition="persist:iphone-simulator-browser"
+                              webpreferences="contextIsolation=yes,nodeIntegration=no,sandbox=yes"
+                            />
+                          ) : (
+                            <>
+                              <iframe key={browserReloadKey} className="browser-viewport" src={browserUrl} title="Website preview" />
+                              <span className="browser-note">Web preview mode uses an iframe. Some websites block embedding. Open the desktop app to use its separate Chromium browser view.</span>
+                            </>
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <div className="placeholder-app">
