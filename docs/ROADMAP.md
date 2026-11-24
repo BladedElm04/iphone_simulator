@@ -11,8 +11,9 @@
 - [x] Embedded website preview
 - [x] URL navigation
 - [x] Portrait and landscape orientation controls
-- [ ] Full browser engine integration for desktop
+- [x] Separate Electron Chromium webview for desktop navigation
 - [ ] Browser history and session isolation
+- [ ] Back/forward navigation and address synchronization
 - [ ] Device viewport profiles
 
 > The current device shell is a UI preview. It is not iOS, Safari, WebKit, or a native application runtime. Some websites block iframe embedding.
