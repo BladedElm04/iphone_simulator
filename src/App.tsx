@@ -44,6 +44,9 @@ export default function App() {
   const [controlCenter, setControlCenter] = useState(false);
   const [locked, setLocked] = useState(false);
   const [deviceMenu, setDeviceMenu] = useState(false);
+  const [browserUrl, setBrowserUrl] = useState("https://example.com");
+  const [browserReloadKey, setBrowserReloadKey] = useState(0);
+  const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
 
   const openApp = (id: AppId) => {
     setActiveApp(id);
@@ -53,6 +56,8 @@ export default function App() {
   const navigate = () => {
     const target = /^https?:\/\//i.test(address) ? address : `https://${address}`;
     setAddress(target);
+    setBrowserUrl(target);
+    setBrowserReloadKey((value) => value + 1);
   };
 
   const activeName = apps.find((item) => item.id === activeApp)?.name;
@@ -86,7 +91,7 @@ export default function App() {
         </div>
 
         <div className="device-area">
-          <div className="device-frame">
+          <div className={`device-frame ${orientation}`}>
             <div className="device-bezel">
               <div className="screen">
                 <div className="wallpaper" />
@@ -118,8 +123,8 @@ export default function App() {
                     </header>
                     {activeApp === "safari" ? (
                       <div className="browser-app">
-                        <div className="browser-address"><Lock size={12} /><input value={address} onChange={(event) => setAddress(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") navigate(); }} aria-label="Website address" /><button onClick={navigate} aria-label="Go to website"><Search size={14} /></button></div>
-                        <div className="browser-content"><Globe size={38} /><h2>Safari Preview</h2><p>Website rendering will be added in the browser integration milestone.</p><span className="browser-note">This is a UI prototype, not a live browser session.</span></div>
+                        <div className="browser-address"><Lock size={12} /><input value={address} onChange={(event) => setAddress(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") navigate(); }} aria-label="Website address" /><button onClick={navigate} aria-label="Go to website"><Search size={14} /></button><button onClick={() => setBrowserReloadKey((value) => value + 1)} aria-label="Reload website"><Activity size={14} /></button></div>
+                        <div className="browser-content"><iframe key={browserReloadKey} className="browser-viewport" src={browserUrl} title="Safari website preview" /><span className="browser-note">Some websites block embedding in other pages. If a site does not appear, its security policy may prohibit iframe previews.</span></div>
                       </div>
                     ) : (
                       <div className="placeholder-app">
@@ -142,7 +147,7 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="device-caption"><span className="caption-dot" />Live preview <i />{device}<i />Portrait</div>
+          <div className="device-caption"><span className="caption-dot" />Live preview <i />{device}<i />{orientation === "portrait" ? "Portrait" : "Landscape"}</div>
         </div>
       </section>
 
@@ -150,12 +155,13 @@ export default function App() {
         <div className="inspector-title"><span>DEVICE CONTROLS</span><Settings size={16} /></div>
         <section className="inspector-section"><h3>Device</h3>
           <div className="detail-row"><span>Model</span><strong>{device}</strong></div>
-          <div className="detail-row"><span>Orientation</span><strong>Portrait</strong></div>
+          <div className="detail-row"><span>Orientation</span><strong>{orientation === "portrait" ? "Portrait" : "Landscape"}</strong></div>
           <div className="detail-row"><span>Appearance</span><strong>Dark wallpaper</strong></div>
           <div className="detail-row"><span>Display scale</span><strong>100%</strong></div>
         </section>
         <section className="inspector-section"><h3>Quick Actions</h3>
           <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>
+          <button className="control-button" onClick={() => setOrientation((value) => value === "portrait" ? "landscape" : "portrait")}><Smartphone size={16} />Rotate Device</button>
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
           <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setLocked(false); }}><AppWindow size={16} />Go to Home Screen</button>
         </section>
