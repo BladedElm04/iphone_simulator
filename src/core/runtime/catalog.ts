@@ -41,6 +41,16 @@ export const runtimeCatalog: RuntimeDescriptor[] = [
       "Supported artifact formats, usage quotas, and features depend on the provider plan."
   },
   {
+    id: "touchhle-legacy",
+    name: "touchHLE (Legacy Apps)",
+    description: "Experimental compatibility for selected early 32-bit iPhone OS applications.",
+    availability: "planned",
+    capabilities: ["legacy-ipa-run"],
+    requirements: ["A compatible decrypted 32-bit app binary", "touchHLE runtime"],
+    limitation:
+      "Only a small subset of early iPhone OS 2.x, 3.x, and iOS 4.0.x apps is supported. It cannot run modern 64-bit iOS apps or install from the App Store."
+  },
+  {
     id: "browserstack",
     name: "BrowserStack App Live",
     description: "Test applications on hosted real iOS devices.",
