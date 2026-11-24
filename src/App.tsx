@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { ComponentType, HTMLAttributes } from "react";
 import {
   Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
-  Folder, Globe, Image, Lock, MessageCircle, Music2, Phone, Search,
+  ExternalLink, Folder, Globe, Image, Lock, MessageCircle, Music2, Phone, Search,
   Settings, Smartphone, Wifi, X
 } from "lucide-react";
 
@@ -60,10 +60,24 @@ export default function App() {
   };
 
   const navigate = () => {
-    const target = /^https?:\/\//i.test(address) ? address : `https://${address}`;
+    const input = address.trim();
+    if (!input) return;
+
+    const isWebAddress = /^(https?:\/\/)?(localhost|[\w-]+\.)+[a-z]{2,}([:/?#].*)?$/i.test(input)
+      || /^https?:\/\//i.test(input)
+      || /^localhost([:/].*)?$/i.test(input);
+
+    const target = isWebAddress
+      ? (/^https?:\/\//i.test(input) ? input : `https://${input}`)
+      : `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+
     setAddress(target);
     setBrowserUrl(target);
     setBrowserReloadKey((value) => value + 1);
+  };
+
+  const openWebsiteInBrowser = () => {
+    window.open(browserUrl, "_blank", "noopener,noreferrer");
   };
 
   const activeName = apps.find((item) => item.id === activeApp)?.name;
@@ -142,7 +156,10 @@ export default function App() {
                           ) : (
                             <>
                               <iframe key={browserReloadKey} className="browser-viewport" src={browserUrl} title="Website preview" />
-                              <span className="browser-note">Web preview mode uses an iframe. Some websites block embedding. Open the desktop app to use its separate Chromium browser view.</span>
+                              <div className="browser-note">
+                                <span>Some websites block embedded previews. You can still open the page in a regular browser tab.</span>
+                                <button onClick={openWebsiteInBrowser}><ExternalLink size={13} />Open website</button>
+                              </div>
                             </>
                           )}
                         </div>
