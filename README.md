@@ -14,7 +14,7 @@ An open-source, Windows-first desktop client for managing mobile web previews an
 - Provider-neutral runtime contracts and capability catalog
 - Planned Apple Simulator, Appetize, and BrowserStack integrations
 
-The current device shell is a visual interface preview. It must not be treated as a running iOS device. The runtime catalog reports this distinction and describes the requirements and limitations of each planned execution provider.
+The current device shell is a visual interface preview. It must not be treated as a running iOS device. In the Electron desktop app, the Safari screen uses an isolated Chromium webview so websites that block iframe embedding can load. This is not Apple's Safari or WebKit. When running the web-only Vite version in a normal browser, the preview falls back to an iframe and remains subject to iframe restrictions. The runtime catalog reports this distinction and describes the requirements and limitations of each planned execution provider.
 
 ## Runtime strategy
 
