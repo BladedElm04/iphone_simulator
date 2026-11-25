@@ -181,6 +181,7 @@ export default function App() {
     setRecentApps((current) => [id, ...current.filter((item) => item !== id)]);
     setControlCenter(false);
     setAppSwitcherOpen(false);
+    setNotificationCenter(false);
   };
 
   const closeApp = (id: AppId) => {
@@ -260,7 +261,7 @@ export default function App() {
                       <div className="weather-widget system-widget"><span>CONNECTIVITY</span><strong>{systemSettings.wifi && !systemSettings.airplaneMode ? "Wi-Fi" : "Offline"}</strong><small>{systemSettings.bluetooth ? "Bluetooth on" : "Bluetooth off"}</small><b><Wifi size={20} /></b></div>
                       <div className="calendar-widget"><span>{new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(now).toUpperCase()}</span><strong>{now.getDate()}</strong><small>{systemSettings.focus ? "Focus enabled" : "No focus active"}</small></div>
                     </div>
-                    <div className="app-grid">{apps.slice(homePage * 8, homePage * 8 + 8).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
+                    <div className="app-grid">{apps.slice(homePage * 6, homePage * 6 + 6).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
                     <div className="home-page-dots">{[0, 1].map((page) => <button key={page} className={homePage === page ? "active" : ""} onClick={() => setHomePage(page)} aria-label={`Home page ${page + 1}`} />)}</div>
                     <div className="dock">{apps.slice(0, 4).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
                   </div>
