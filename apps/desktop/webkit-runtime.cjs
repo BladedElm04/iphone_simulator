@@ -4,7 +4,7 @@
 // streams JPEG frames to the renderer. Input is forwarded as touch/wheel/keys.
 
 const FRAME_INTERVAL_MS = 100;
-const JPEG_QUALITY = 72;
+const JPEG_QUALITY = 84;
 const NAVIGATION_TIMEOUT_MS = 30000;
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 const NAMED_KEYS = new Set([
@@ -64,7 +64,7 @@ function createWebKitRuntime({ onFrame, onState }) {
     const tick = async () => {
       if (token !== captureToken || !page) return;
       try {
-        const buffer = await page.screenshot({ type: "jpeg", quality: JPEG_QUALITY, scale: "css" });
+        const buffer = await page.screenshot({ type: "jpeg", quality: JPEG_QUALITY, scale: "device" });
         if (token === captureToken) onFrame(buffer.toString("base64"));
       } catch {
         // The page can be mid-navigation; skip this frame.
@@ -175,6 +175,31 @@ function createWebKitRuntime({ onFrame, onState }) {
         await target.mouse.move(finite(event.x, "x"), finite(event.y, "y"));
         await target.mouse.wheel(finite(event.dx, "dx"), finite(event.dy, "dy"));
         break;
+      case "drag": {
+        const x = finite(event.x, "x");
+        const y = finite(event.y, "y");
+        const dx = finite(event.dx, "dx");
+        const dy = finite(event.dy, "dy");
+        await target.evaluate(({ x, y, dx, dy }) => {
+          const start = document.elementFromPoint(x, y);
+          let scrollable = start;
+          while (scrollable && scrollable !== document.documentElement) {
+            const style = getComputedStyle(scrollable);
+            const canScrollY = /(auto|scroll)/.test(style.overflowY) && scrollable.scrollHeight > scrollable.clientHeight;
+            const canScrollX = /(auto|scroll)/.test(style.overflowX) && scrollable.scrollWidth > scrollable.clientWidth;
+            if (canScrollY || canScrollX) break;
+            scrollable = scrollable.parentElement;
+          }
+          const targetElement = scrollable && scrollable !== document.documentElement
+            ? scrollable
+            : document.scrollingElement;
+          if (targetElement) {
+            targetElement.scrollTop -= dy;
+            targetElement.scrollLeft -= dx;
+          }
+        }, { x, y, dx, dy });
+        break;
+      }
       case "key":
         if (NAMED_KEYS.has(event.key)) await target.keyboard.press(event.key);
         else if (typeof event.key === "string" && [...event.key].length === 1) await target.keyboard.type(event.key);
