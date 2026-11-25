@@ -260,3 +260,5 @@ button.ios-settings-row{cursor:pointer}
 .control-brightness{height:38px;margin-top:13px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:11px;background:#ffffff20;color:#fff}
 .control-brightness input{flex:1;min-width:0;accent-color:#fff}
 .screen{touch-action:pan-y}
+
+.native-app-host{position:absolute;z-index:7;inset:0;background:#f2f2f7;display:flex;flex-direction:column;color:#17171a}.native-app-host .native-app{flex:1;min-height:0}.native-app-host .app-home-indicator{z-index:12}
