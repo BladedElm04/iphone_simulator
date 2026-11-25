@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Camera, FileText, Image as ImageIcon, MapPin, MessageCircle, Music2,
-  Phone, Play, Pause, Plus, Search, Send, Square, Trash2, Upload, Video
+  Phone, Play, Pause, Plus, Search, Send, Trash2, Upload, Video
 } from "lucide-react";
 
 export type NativeAppId = "photos" | "files" | "phone" | "messages" | "camera" | "music" | "maps";
