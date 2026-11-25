@@ -188,8 +188,8 @@ export function NativeApps({ app }: NativeAppsProps) {
       {app === "maps" && (
         <div className="maps-layout">
           <form className="maps-search" onSubmit={(event) => { event.preventDefault(); setMapSearch(mapQuery.trim() || "New York"); }}><Search size={16} /><input value={mapQuery} onChange={(event) => setMapQuery(event.target.value)} placeholder="Search Maps" /><button type="submit">Go</button></form>
-          <iframe title="Map preview" src={`https://www.openstreetmap.org/export/embed.html?search=${encodeURIComponent(mapSearch)}`} loading="lazy" />
-          <a className="native-map-link" href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(mapSearch)}`} target="_blank" rel="noreferrer"><MapPin size={15} /> Open full map</a>
+          <iframe title="Map preview" src={`https://www.google.com/maps?q=${encodeURIComponent(mapSearch)}&output=embed`} loading="lazy" />
+          <a className="native-map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapSearch)}`} target="_blank" rel="noreferrer"><MapPin size={15} /> Open full map</a>
         </div>
       )}
     </div>
