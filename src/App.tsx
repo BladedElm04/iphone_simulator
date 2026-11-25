@@ -63,11 +63,11 @@ export default function App() {
   const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
   const [islandExpanded, setIslandExpanded] = useState(false);
   const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
-  const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
+  const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);\n  const [homePage, setHomePage] = useState(0);\n  const homeSwipe = useRef<number | null>(null);
   const [recentApps, setRecentApps] = useState<AppId[]>([]);
   const [notificationCenter, setNotificationCenter] = useState(false);
   const [notifications, setNotifications] = useState<{ id: number; title: string; body: string; time: string }[]>([]);
-  const screenGesture = useRef<{ x: number; y: number } | null>(null);
+  const screenGesture = useRef<{ x: number; y: number; edge: "top" | "bottom" } | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -216,13 +216,13 @@ export default function App() {
                     <span>{dateLabel}</span><strong>{timeLabel}</strong><small>Tap to unlock</small>
                   </div>
                 ) : (
-                  <div className="home-screen">
+                  <div className="home-screen" onPointerDown={(event) => { homeSwipe.current = event.clientX; }} onPointerUp={(event) => { if (homeSwipe.current === null) return; const delta = event.clientX - homeSwipe.current; homeSwipe.current = null; if (Math.abs(delta) > 35) setHomePage((page) => Math.max(0, Math.min(1, page + (delta < 0 ? 1 : -1)))); }}>
                     <div className="home-date"><span>{dateLabel}</span><strong>{timeLabel}</strong></div>
                     <div className="widget-row">
                       <div className="weather-widget system-widget"><span>CONNECTIVITY</span><strong>{systemSettings.wifi && !systemSettings.airplaneMode ? "Wi-Fi" : "Offline"}</strong><small>{systemSettings.bluetooth ? "Bluetooth on" : "Bluetooth off"}</small><b><Wifi size={20} /></b></div>
                       <div className="calendar-widget"><span>{new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(now).toUpperCase()}</span><strong>{now.getDate()}</strong><small>{systemSettings.focus ? "Focus enabled" : "No focus active"}</small></div>
                     </div>
-                    <div className="app-grid">{apps.map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
+                    <div className="app-grid">{apps.slice(homePage * 8, homePage * 8 + 8).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>\n                    <div className="home-page-dots">{[0, 1].map((page) => <button key={page} className={homePage === page ? "active" : ""} onClick={() => setHomePage(page)} aria-label={`Home page ${page + 1}`} />)}</div>
                     <div className="dock">{apps.slice(0, 4).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
                   </div>
                 )}
