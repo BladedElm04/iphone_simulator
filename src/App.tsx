@@ -22,11 +22,11 @@ const apps: { id: AppId; name: string; icon: typeof Globe; color: string }[] = [
   { id: "music", name: "Music", icon: Music2, color: "linear-gradient(145deg,#ff7a91,#d91b42)" }
 ];
 
-function StatusBar() {
+function StatusBar({ batteryPercentage }: { batteryPercentage: boolean }) {
   return (
     <div className="status-bar">
       <span>9:41</span>
-      <div className="status-icons"><Activity size={13} /><Wifi size={15} /><BatteryFull size={18} /></div>
+      <div className="status-icons"><Activity size={13} /><Wifi size={15} />{batteryPercentage && <span>100%</span>}<BatteryFull size={18} /></div>
     </div>
   );
 }
@@ -109,9 +109,9 @@ export default function App() {
         <div className="device-area">
           <div className={`device-frame ${orientation}`}>
             <div className="device-bezel">
-              <div className="screen">
+              <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }}>
                 <div className="wallpaper" />
-                <StatusBar />
+                <StatusBar batteryPercentage={systemSettings.batteryPercentage} />
                 <button className="dynamic-island" onClick={() => setControlCenter(!controlCenter)} aria-label="Toggle Control Center"><span /></button>
 
                 {locked ? (
