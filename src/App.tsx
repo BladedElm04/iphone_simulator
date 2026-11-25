@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import {
   Activity, AppWindow, Battery, Bell, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, Map, MessageCircle, Music2, Phone,
-  Settings, Smartphone, Timer, Wifi, X
+  Settings, Smartphone, Sun, Timer, Wifi, X
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
