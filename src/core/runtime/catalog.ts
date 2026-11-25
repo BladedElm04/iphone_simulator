@@ -15,6 +15,16 @@ export const runtimeCatalog: RuntimeDescriptor[] = [
       "This is a browser preview, not iOS, Safari, WebKit, or native app execution."
   },
   {
+    id: "playwright-webkit",
+    name: "WebKit Engine (Playwright)",
+    description: "Render websites with a real WebKit engine using an iPhone viewport, user agent, and touch input.",
+    availability: "not-configured",
+    capabilities: ["web-preview", "touch-input", "keyboard-input", "screenshot"],
+    requirements: ["Playwright WebKit browser (pnpm setup:webkit)", "Linux system libraries on WSL (playwright install-deps webkit)"],
+    limitation:
+      "This is the WebKit engine, not iOS or Safari. Playwright's Windows and Linux builds are not the iOS port, so iOS-specific behavior (PDF handling, safe-area insets, dynamic toolbars, media codecs) is not reproduced."
+  },
+  {
     id: "apple-simulator",
     name: "Apple Simulator",
     description: "Run iOS Simulator builds using Apple's Simulator runtime.",
