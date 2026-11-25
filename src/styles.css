@@ -291,4 +291,4 @@ button.ios-settings-row{cursor:pointer}
 .device-frame.portrait.model-iphone-15-pro{width:300px!important}
 .device-frame.portrait.model-iphone-16{width:302px!important}
 .device-frame.portrait.model-iphone-14{width:301px!important}
-.device-frame.model-iphone-16-pro .dynamic-island{width:99px}
+.device-frame.model-iphone-16-pro .dynamic-island:not(.has-activity):not(.expanded){width:99px}
