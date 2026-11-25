@@ -168,7 +168,7 @@ button.ios-settings-row{cursor:pointer}
   box-shadow:inset 0 0 0 1px #182536,0 0 0 1px #08090c;
 }
 .dynamic-island.has-activity{width:112px;justify-content:flex-start;padding:0 12px}
-.dynamic-island .island-content{position:static;width:100%;display:flex;align-items:center;gap:8px;color:#fff;animation:island-content-in .2s ease both}
+.dynamic-island .island-content{position:static;width:100%;display:flex;flex-direction:row;align-items:center;gap:8px;color:#fff;animation:island-content-in .2s ease both}
 .dynamic-island .island-activity-icon{position:static;width:20px;height:20px;display:grid;place-items:center;color:#a8e6b7;background:transparent}
 .dynamic-island .island-activity-copy{position:static;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:none;width:auto;height:auto;border-radius:0}
 .dynamic-island .island-activity-copy strong{position:static;font-size:11px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.1px}
