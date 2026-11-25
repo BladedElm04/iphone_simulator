@@ -225,7 +225,7 @@ export default function App() {
                       <SettingsApp settings={systemSettings} onChange={updateSystemSetting} />
                     ) : (
                       <div className="placeholder-app">
-                        <div className="placeholder-icon">{activeApp === "settings" ? <Settings /> : activeApp === "photos" ? <Image /> : activeApp === "files" ? <Folder /> : activeApp === "phone" ? <Phone /> : activeApp === "camera" ? <Camera /> : activeApp === "music" ? <Music2 /> : <MessageCircle />}</div>
+                        <div className="placeholder-icon">{activeApp === "photos" ? <Image /> : activeApp === "files" ? <Folder /> : activeApp === "phone" ? <Phone /> : activeApp === "camera" ? <Camera /> : activeApp === "music" ? <Music2 /> : <MessageCircle />}</div>
                         <h2>{activeName}</h2><p>This built-in app is part of the interface prototype.</p><span>More functionality is planned.</span>
                       </div>
                     )}
