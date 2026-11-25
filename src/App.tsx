@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Activity, AppWindow, Battery, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
-  Settings, Smartphone, Wifi, X
+  Settings, Smartphone, Timer, Wifi, X
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
@@ -60,6 +60,7 @@ export default function App() {
   const [now, setNow] = useState(() => new Date());
   const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
   const [islandExpanded, setIslandExpanded] = useState(false);
+  const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
   const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
   const [recentApps, setRecentApps] = useState<AppId[]>([]);
 
@@ -90,6 +91,12 @@ export default function App() {
       battery?.removeEventListener("levelchange", updateBattery);
     };
   }, []);
+
+  const timerSeconds = timerEndsAt === null ? 0 : Math.max(0, Math.ceil((timerEndsAt - now.getTime()) / 1000));
+  const timerLabel = `${Math.floor(timerSeconds / 60)}:${String(timerSeconds % 60).padStart(2, "0")}`;
+  useEffect(() => {
+    if (timerEndsAt !== null && timerSeconds === 0) setTimerEndsAt(null);
+  }, [timerEndsAt, timerSeconds]);
 
   const timeLabel = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
@@ -182,16 +189,20 @@ export default function App() {
                   wifi={systemSettings.wifi && !systemSettings.airplaneMode}
                 />
                 <button
-                  className={`dynamic-island${islandExpanded ? " expanded" : ""}`}
-                  onClick={() => setIslandExpanded((value) => !value)}
-                  aria-label="Toggle Dynamic Island"
-                  aria-expanded={islandExpanded}
+                  className={`dynamic-island${islandExpanded && timerEndsAt !== null ? " expanded" : ""}${timerEndsAt !== null ? " has-activity" : ""}`}
+                  onClick={() => { if (timerEndsAt !== null) setIslandExpanded((value) => !value); }}
+                  aria-label={timerEndsAt !== null ? "Show timer activity" : "Dynamic Island"}
+                  aria-expanded={islandExpanded && timerEndsAt !== null}
+                  disabled={timerEndsAt === null}
                 >
                   <span className="island-camera" />
-                  {islandExpanded && (
+                  {timerEndsAt !== null && (
                     <span className="island-content">
-                      <strong>{activeApp === "music" ? "Now Playing" : activeApp === "safari" ? "Safari" : activeApp ? activeName : "No Live Activity"}</strong>
-                      <small>{activeApp ? "App is open" : "Activities will appear here"}</small>
+                      <span className="island-activity-icon"><Timer size={15} /></span>
+                      <span className="island-activity-copy">
+                        <strong>{timerLabel}</strong>
+                        {islandExpanded && <small>Timer · Running</small>}
+                      </span>
                     </span>
                   )}
                 </button>
@@ -269,7 +280,14 @@ export default function App() {
   <button className={systemSettings.focus ? "active" : ""} onClick={() => updateSystemSetting("focus", !systemSettings.focus)}><Activity />Focus<span>{systemSettings.focus ? "On" : "Off"}</span></button>
   <button className={systemSettings.airplaneMode ? "active" : ""} onClick={() => updateSystemSetting("airplaneMode", !systemSettings.airplaneMode)}><Smartphone />Airplane Mode<span>{systemSettings.airplaneMode ? "On" : "Off"}</span></button>
 </div>
-                    <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
+                    <div className="control-actions">
+                      {timerEndsAt === null ? (
+                        <button className="lock-button" onClick={() => { setTimerEndsAt(Date.now() + 60000); setIslandExpanded(true); }}> <Timer size={14} /> Start 1-minute timer</button>
+                      ) : (
+                        <button className="lock-button" onClick={() => { setTimerEndsAt(null); setIslandExpanded(false); }}>Stop Timer</button>
+                      )}
+                      <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
+                    </div>
                   </section>
                 )}
                 <button className="home-indicator" onClick={() => { setActiveApp(null); setControlCenter(false); setIslandExpanded(false); }} aria-label="Return to Home" />
