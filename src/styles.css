@@ -152,3 +152,33 @@ button.ios-settings-row{cursor:pointer}
 
 .dynamic-island{outline:none}.dynamic-island:focus-visible{outline:2px solid #ffffffb8;outline-offset:3px}
 .app-switcher{z-index:13}
+
+
+/* Dynamic Island: idle hardware cutout and contextual live activity */
+.dynamic-island{
+  width:94px;height:27px;top:7px;padding:0;border:0;border-radius:18px;
+  background:#000;box-shadow:0 0 0 1px #ffffff08;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  transition:width .32s cubic-bezier(.22,1,.36,1),height .32s cubic-bezier(.22,1,.36,1),border-radius .32s ease;
+}
+.dynamic-island:disabled{cursor:default;opacity:1}
+.dynamic-island .island-camera{
+  position:absolute;right:12px;top:8px;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle at 38% 35%,#263c55 0%,#101b2b 38%,#05070b 72%);
+  box-shadow:inset 0 0 0 1px #182536,0 0 0 1px #08090c;
+}
+.dynamic-island.has-activity{width:112px;justify-content:flex-start;padding:0 12px}
+.dynamic-island .island-content{position:static;width:100%;display:flex;align-items:center;gap:8px;color:#fff;animation:island-content-in .2s ease both}
+.dynamic-island .island-activity-icon{position:static;width:20px;height:20px;display:grid;place-items:center;color:#a8e6b7;background:transparent}
+.dynamic-island .island-activity-copy{position:static;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:none;width:auto;height:auto;border-radius:0}
+.dynamic-island .island-activity-copy strong{position:static;font-size:11px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.1px}
+.dynamic-island .island-activity-copy small{position:static;font-size:7px;color:#aeb7c4;white-space:nowrap}
+.dynamic-island.has-activity .island-camera{right:12px;top:8px}
+.dynamic-island.expanded{top:6px;width:224px;height:68px;padding:0 15px;border-radius:22px;justify-content:flex-start;box-shadow:0 8px 24px #0008;animation:island-open .32s cubic-bezier(.22,1,.36,1)}
+.dynamic-island.expanded .island-content{gap:11px}
+.dynamic-island.expanded .island-activity-icon{width:32px;height:32px;border-radius:9px;background:#183323}
+.dynamic-island.expanded .island-activity-copy strong{font-size:14px}
+.dynamic-island.expanded .island-activity-copy small{font-size:8px}
+.dynamic-island.expanded .island-camera{right:15px;top:15px}
+.control-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.control-actions .lock-button{display:flex;align-items:center;justify-content:center;gap:7px;margin:0;cursor:pointer}
