@@ -189,3 +189,59 @@ button.ios-settings-row{cursor:pointer}
 .device-frame.portrait{width:302px!important}
 .device-frame.landscape{width:625px!important;aspect-ratio:var(--device-aspect-ratio, 625 / 286)}
 .device-notch{position:absolute;z-index:5;top:7px;left:50%;transform:translateX(-50%);width:116px;height:28px;background:#030405;border-radius:0 0 18px 18px;box-shadow:0 1px 0 #ffffff10}
+
+
+/* Functional built-in app surfaces */
+.native-app{flex:1;min-height:0;display:flex;flex-direction:column;background:#f2f2f7;color:#17171a;overflow:hidden}
+.native-app-heading{height:52px;flex:0 0 52px;padding:0 17px;display:flex;align-items:center;justify-content:space-between;background:#f2f2f7}
+.native-app-heading h2{font-size:22px;letter-spacing:-.5px;margin:0;font-weight:750}
+.native-icon-button{width:30px;height:30px;border:0;border-radius:50%;background:#e4e4e9;color:#2878d0;display:grid;place-items:center}
+.native-hidden-input{display:none}
+.native-scroll{flex:1;min-height:0;overflow:auto;padding:8px 14px 28px}
+.native-section-title{font-size:12px;font-weight:700;color:#6d6d73;margin:13px 3px}
+.native-empty-state{width:100%;min-height:190px;border:0;border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:#8a8a90;text-align:center;padding:20px}
+.native-empty-state strong{font-size:12px;color:#252529}.native-empty-state span{font-size:9px}.native-empty-state b{display:flex;align-items:center;gap:6px;color:#2878d0;font-size:10px;margin-top:5px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
+.photo-tile{border:0;padding:0;aspect-ratio:1;background:#ddd;overflow:hidden}.photo-tile img{width:100%;height:100%;object-fit:cover}
+.native-location-card{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:0;border-radius:12px;background:#fff;color:#2878d0;text-align:left}
+.native-location-card span,.native-file-row span{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.native-location-card strong,.native-file-row strong{font-size:11px;color:#242428;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.native-location-card small,.native-file-row small{font-size:9px;color:#8a8a90}
+.native-file-row{min-height:51px;display:flex;align-items:center;gap:10px;padding:8px 5px;border-bottom:1px solid #dedee3;color:#777}
+.native-file-row a,.native-file-row button{font-size:9px;color:#2878d0;text-decoration:none;border:0;background:none;padding:5px}
+.messages-layout{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.messages-contact{height:53px;flex:0 0 53px;display:flex;align-items:center;gap:9px;padding:0 13px;border-bottom:1px solid #e5e5ea}
+.messages-avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#d8e4f5;color:#426b9d;font-size:10px;font-weight:700}
+.messages-contact span:last-child{display:flex;flex-direction:column;gap:2px}.messages-contact strong{font-size:10px}.messages-contact small{font-size:8px;color:#34a853}
+.messages-thread{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:14px 12px}
+.message-bubble{max-width:82%;padding:9px 11px;border-radius:15px;display:flex;flex-direction:column;gap:4px;font-size:10px;line-height:1.4}
+.message-bubble small{font-size:7px;opacity:.65;align-self:flex-end}
+.message-bubble.incoming{align-self:flex-start;background:#e9e9ed;color:#202024;border-bottom-left-radius:5px}
+.message-bubble.outgoing{align-self:flex-end;background:#1685f8;color:white;border-bottom-right-radius:5px}
+.message-composer{height:49px;flex:0 0 49px;border-top:1px solid #e5e5ea;display:flex;align-items:center;gap:8px;padding:6px 10px}
+.message-composer input{height:33px;min-width:0;flex:1;border:1px solid #d5d5dc;border-radius:18px;padding:0 12px;font-size:10px;outline:none}
+.message-composer button{width:30px;height:30px;border:0;border-radius:50%;background:#1685f8;color:#fff;display:grid;place-items:center}.message-composer button:disabled{opacity:.4}
+.camera-layout{flex:1;min-height:0;display:flex;flex-direction:column;background:#111;color:#fff;padding:10px}
+.camera-viewfinder{flex:1;min-height:0;border-radius:13px;overflow:hidden;background:#222;display:grid;place-items:center}
+.camera-viewfinder video{width:100%;height:100%;object-fit:cover}.camera-viewfinder>div{display:flex;flex-direction:column;align-items:center;gap:10px;color:#aaa;font-size:10px}
+.camera-controls{height:74px;flex:0 0 74px;display:flex;align-items:center;justify-content:space-between;padding:0 9px}
+.camera-controls>button:first-child{display:flex;align-items:center;gap:6px;border:0;border-radius:18px;background:#333;color:#fff;padding:9px;font-size:9px}
+.camera-shutter{width:49px;height:49px;border:3px solid #fff;border-radius:50%;background:transparent;display:grid;place-items:center}.camera-shutter span{width:35px;height:35px;border-radius:50%;background:#fff}.camera-shutter:disabled{opacity:.35}.camera-spacer{width:85px}
+.native-inline-error{font-size:9px;color:#ff9999}.native-footnote{font-size:8px;color:#888;text-align:center;line-height:1.4}
+.music-layout,.phone-layout{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:20px 17px;gap:12px}
+.music-art{width:135px;height:135px;border-radius:22px;background:linear-gradient(145deg,#ff9cac,#d5224d);display:grid;place-items:center;color:#fff;box-shadow:0 12px 25px #d5224d33;margin:10px 0}
+.music-layout>strong{font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.music-layout>span{font-size:9px;color:#85858b}
+.music-layout audio{width:100%;height:34px}.native-primary-button,.native-secondary-button{display:flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:18px;background:#2878d0;color:#fff;padding:9px 15px;font-size:10px}
+.native-secondary-button{background:#e4eaf3;color:#2878d0}
+.native-list-row{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px;border:0;border-bottom:1px solid #ddd;background:transparent;text-align:left;font-size:9px;color:#333}
+.phone-number{height:42px;font-size:22px;letter-spacing:1px;color:#252529}
+.phone-keypad{width:190px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.phone-keypad button{height:45px;border:0;border-radius:50%;background:#e2e2e8;color:#242428;font-size:19px}
+.phone-actions{display:flex;align-items:center;gap:15px}.phone-actions button:last-child{width:38px;height:38px;border:0;border-radius:50%;background:#e2e2e8;color:#555}
+.phone-call-button{min-width:112px;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border:0;border-radius:22px;background:#34b65a;color:white;font-size:10px}.phone-call-button:disabled{opacity:.4}
+.native-call-status{font-size:9px;color:#24994b}
+.maps-layout{flex:1;min-height:0;display:flex;flex-direction:column;padding:9px;gap:8px}
+.maps-search{height:37px;flex:0 0 37px;display:flex;align-items:center;gap:7px;padding:0 9px;border-radius:9px;background:#fff;color:#777}
+.maps-search input{flex:1;min-width:0;border:0;outline:0;font-size:10px}.maps-search button{border:0;background:none;color:#2878d0;font-size:10px}
+.maps-layout iframe{flex:1;min-height:0;width:100%;border:0;border-radius:10px;background:#e8e8e8}
+.native-map-link{display:flex;align-items:center;justify-content:center;gap:6px;color:#2878d0;text-decoration:none;font-size:9px;padding:5px}
