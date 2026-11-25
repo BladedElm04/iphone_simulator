@@ -17,6 +17,7 @@ export type WebKitResult = { ok: true; engineVersion?: string } | { ok: false; e
 export type WebKitInput =
   | { type: "tap"; x: number; y: number }
   | { type: "scroll"; x: number; y: number; dx: number; dy: number }
+  | { type: "drag"; x: number; y: number; dx: number; dy: number }
   | { type: "key"; key: string };
 
 export interface WebKitBridge {
