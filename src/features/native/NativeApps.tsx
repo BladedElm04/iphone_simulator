@@ -44,12 +44,19 @@ export function NativeApps({ app }: NativeAppsProps) {
   const streamRef = useRef<MediaStream | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const assetUrlsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => () => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
-    assets.forEach((asset) => URL.revokeObjectURL(asset.url));
-    if (selectedAudio) URL.revokeObjectURL(selectedAudio.url);
+    assetUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    assetUrlsRef.current.clear();
   }, []);
+
+  useEffect(() => {
+    if (cameraReady && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  }, [cameraReady]);
 
   const importFiles = (files: FileList | null) => {
     if (!files) return;
@@ -59,6 +66,7 @@ export function NativeApps({ app }: NativeAppsProps) {
       url: URL.createObjectURL(file),
       type: file.type
     }));
+    next.forEach((asset) => assetUrlsRef.current.add(asset.url));
     setAssets((current) => [...current, ...next]);
     const audio = next.find((asset) => asset.type.startsWith("audio/"));
     if (audio && app === "music") setSelectedAudio(audio);
@@ -67,7 +75,7 @@ export function NativeApps({ app }: NativeAppsProps) {
   const removeAsset = (id: string) => {
     setAssets((current) => {
       const target = current.find((asset) => asset.id === id);
-      if (target) URL.revokeObjectURL(target.url);
+      if (target) { URL.revokeObjectURL(target.url); assetUrlsRef.current.delete(target.url); }
       return current.filter((asset) => asset.id !== id);
     });
   };
@@ -98,6 +106,7 @@ export function NativeApps({ app }: NativeAppsProps) {
       if (!blob) return;
       const file = new File([blob], `Camera-${Date.now()}.jpg`, { type: "image/jpeg" });
       const url = URL.createObjectURL(file);
+      assetUrlsRef.current.add(url);
       setAssets((current) => [...current, { id: `camera-${Date.now()}`, name: file.name, url, type: file.type }]);
     }, "image/jpeg", 0.92);
   };
