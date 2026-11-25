@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
+import { SettingsApp } from "./features/settings/SettingsApp";
+import type { SystemSettingsState } from "./features/settings/SettingsApp";
 
 type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music";
 
@@ -47,6 +49,27 @@ export default function App() {
   const [locked, setLocked] = useState(false);
   const [deviceMenu, setDeviceMenu] = useState(false);
   const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
+  const [systemSettings, setSystemSettings] = useState<SystemSettingsState>({
+    airplaneMode: false,
+    wifi: true,
+    bluetooth: true,
+    focus: false,
+    darkAppearance: true,
+    locationServices: true,
+    batteryPercentage: true,
+    brightness: 80
+  });
+
+  const updateSystemSetting = <K extends keyof SystemSettingsState>(key: K, value: SystemSettingsState[K]) => {
+    setSystemSettings((current) => {
+      const next = { ...current, [key]: value };
+      if (key === "airplaneMode" && value === true) {
+        next.wifi = false;
+        next.bluetooth = false;
+      }
+      return next;
+    });
+  };
 
   const openApp = (id: AppId) => {
     setActiveApp(id);
@@ -116,6 +139,8 @@ export default function App() {
                     </header>
                     {activeApp === "safari" ? (
                       <SafariApp profile={profile} orientation={orientation} />
+                    ) : activeApp === "settings" ? (
+                      <SettingsApp settings={systemSettings} onChange={updateSystemSetting} />
                     ) : (
                       <div className="placeholder-app">
                         <div className="placeholder-icon">{activeApp === "settings" ? <Settings /> : activeApp === "photos" ? <Image /> : activeApp === "files" ? <Folder /> : activeApp === "phone" ? <Phone /> : activeApp === "camera" ? <Camera /> : activeApp === "music" ? <Music2 /> : <MessageCircle />}</div>
@@ -129,7 +154,12 @@ export default function App() {
                 {controlCenter && (
                   <section className="control-center">
                     <div className="control-heading"><strong>Control Center</strong><button onClick={() => setControlCenter(false)} aria-label="Close Control Center"><X size={16} /></button></div>
-                    <div className="control-grid"><div><Wifi />Wi-Fi</div><div><Activity />Focus</div><div><Bluetooth />Bluetooth</div><div><Lock />Screen Lock</div></div>
+                    <div className="control-grid">
+  <button className={systemSettings.wifi ? "active" : ""} onClick={() => updateSystemSetting("wifi", !systemSettings.wifi)}><Wifi />Wi-Fi<span>{systemSettings.wifi ? "On" : "Off"}</span></button>
+  <button className={systemSettings.bluetooth ? "active" : ""} onClick={() => updateSystemSetting("bluetooth", !systemSettings.bluetooth)}><Bluetooth />Bluetooth<span>{systemSettings.bluetooth ? "On" : "Off"}</span></button>
+  <button className={systemSettings.focus ? "active" : ""} onClick={() => updateSystemSetting("focus", !systemSettings.focus)}><Activity />Focus<span>{systemSettings.focus ? "On" : "Off"}</span></button>
+  <button className={systemSettings.airplaneMode ? "active" : ""} onClick={() => updateSystemSetting("airplaneMode", !systemSettings.airplaneMode)}><Smartphone />Airplane Mode<span>{systemSettings.airplaneMode ? "On" : "Off"}</span></button>
+</div>
                     <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setActiveApp(null); }}>Lock Device</button>
                   </section>
                 )}
