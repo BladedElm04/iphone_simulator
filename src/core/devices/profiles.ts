@@ -6,6 +6,7 @@ export interface DeviceProfile {
   /** Logical screen height in CSS points (portrait). */
   height: number;
   deviceScaleFactor: number;
+  hasDynamicIsland: boolean;
   userAgent: string;
 }
 
@@ -14,10 +15,10 @@ const MOBILE_SAFARI_USER_AGENT =
   "(KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
 
 export const deviceProfiles: DeviceProfile[] = [
-  { id: "iphone-16-pro", name: "iPhone 16 Pro", width: 402, height: 874, deviceScaleFactor: 3, userAgent: MOBILE_SAFARI_USER_AGENT },
-  { id: "iphone-16", name: "iPhone 16", width: 393, height: 852, deviceScaleFactor: 3, userAgent: MOBILE_SAFARI_USER_AGENT },
-  { id: "iphone-15-pro", name: "iPhone 15 Pro", width: 393, height: 852, deviceScaleFactor: 3, userAgent: MOBILE_SAFARI_USER_AGENT },
-  { id: "iphone-14", name: "iPhone 14", width: 390, height: 844, deviceScaleFactor: 3, userAgent: MOBILE_SAFARI_USER_AGENT }
+  { id: "iphone-16-pro", name: "iPhone 16 Pro", width: 402, height: 874, deviceScaleFactor: 3, hasDynamicIsland: true, userAgent: MOBILE_SAFARI_USER_AGENT },
+  { id: "iphone-16", name: "iPhone 16", width: 393, height: 852, deviceScaleFactor: 3, hasDynamicIsland: true, userAgent: MOBILE_SAFARI_USER_AGENT },
+  { id: "iphone-15-pro", name: "iPhone 15 Pro", width: 393, height: 852, deviceScaleFactor: 3, hasDynamicIsland: true, userAgent: MOBILE_SAFARI_USER_AGENT },
+  { id: "iphone-14", name: "iPhone 14", width: 390, height: 844, deviceScaleFactor: 3, hasDynamicIsland: false, userAgent: MOBILE_SAFARI_USER_AGENT }
 ];
 
 export const defaultDeviceName = deviceProfiles[0].name;
