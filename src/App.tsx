@@ -227,7 +227,7 @@ export default function App() {
                   </div>
                 )}
 
-                <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>\n                  <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>\n                  <NativeApps app={nativeApp} />\n                  <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />\n                </div>\n\n                {activeApp && (
+                <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>\n                  <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>\n                  <NativeApps app={nativeApp} dark={systemSettings.darkAppearance} />\n                  <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />\n                </div>\n\n                {activeApp && (
                   <section className="app-window">
                     <header className="app-window-header">
                       <button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button>
