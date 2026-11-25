@@ -65,6 +65,7 @@ export default function App() {
   const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
   const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
   const [homePage, setHomePage] = useState(0);
+  const [volume, setVolume] = useState(70);
   const homeSwipe = useRef<number | null>(null);
   const [recentApps, setRecentApps] = useState<AppId[]>([]);
   const [notificationCenter, setNotificationCenter] = useState(false);
@@ -267,7 +268,7 @@ export default function App() {
 
                 <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>
                   <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>
-                  <NativeApps app={nativeApp} dark={systemSettings.darkAppearance} />
+                  <NativeApps app={nativeApp} dark={systemSettings.darkAppearance} volume={volume} />
                   <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />
                 </div>
 
@@ -338,6 +339,7 @@ export default function App() {
                         <button className="lock-button" onClick={() => { setTimerEndsAt(null); setIslandExpanded(false); }}>Stop Timer</button>
                       )}
                       <label className="control-brightness"><Sun size={15} /><input aria-label="Display brightness" type="range" min="10" max="100" value={systemSettings.brightness} onChange={(event) => updateSystemSetting("brightness", Number(event.target.value))} /></label>
+                      <label className="control-brightness"><span aria-hidden="true">−</span><input aria-label="System volume" type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} /><span aria-hidden="true">+</span></label>
                       <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
                     </div>
                   </section>
