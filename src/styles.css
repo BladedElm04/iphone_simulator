@@ -53,3 +53,49 @@ webview.browser-viewport{width:100%;height:100%;}
 .webkit-surface{position:relative;flex:1;width:100%;min-height:0;outline:0;touch-action:none;user-select:none;background:#fff;overflow:hidden}
 .webkit-surface img{display:block;width:100%;height:100%;pointer-events:none}
 .webkit-starting{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;color:#707b8d}
+
+
+/* Interactive system settings */
+.control-grid button{height:72px;border:0;border-radius:13px;background:#ffffff22;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:8px;font-size:9px;cursor:pointer}
+.control-grid button.active{background:#f5f7ff;color:#172033}
+.control-grid button svg{width:18px;height:18px}
+.control-grid button span{font-size:8px;opacity:.7}
+.ios-settings-page{flex:1;min-height:0;display:flex;flex-direction:column;background:#f2f2f7;color:#1c1c1e;overflow:hidden}
+.ios-settings-main-header{padding:18px 18px 10px;background:#f2f2f7}
+.ios-settings-main-header h2{font-size:25px;letter-spacing:-.6px;margin:0;font-weight:750}
+.ios-settings-nav{height:48px;flex:0 0 48px;display:grid;grid-template-columns:1fr 1.5fr 1fr;align-items:center;padding:0 12px;border-bottom:1px solid #d8d8dd;background:#f8f8fa}
+.ios-settings-nav strong{text-align:center;font-size:12px;white-space:nowrap}
+.ios-settings-nav>button{display:flex;align-items:center;gap:1px;color:#2878d0;border:0;background:none;font-size:10px;padding:5px 0;cursor:pointer}
+.ios-settings-nav>span{min-width:1px}
+.ios-settings-content{overflow:auto;flex:1;padding:8px 14px 30px}
+.ios-settings-search{height:34px;display:flex;align-items:center;gap:7px;padding:0 10px;margin:0 0 13px;border-radius:9px;background:#e3e3e8;color:#777}
+.ios-settings-search input{width:100%;border:0;outline:0;background:transparent;font-size:11px;color:#202027}
+.ios-account-card{width:100%;display:flex;align-items:center;gap:10px;padding:12px;border:0;border-radius:12px;background:#fff;text-align:left;margin:0 0 17px;color:#222}
+.ios-account-card>span:first-child{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#dce8fa;color:#5686c5}
+.ios-account-card>span:nth-child(2){display:flex;flex:1;flex-direction:column;gap:3px}
+.ios-account-card strong{font-size:11px;font-weight:600}
+.ios-account-card small{font-size:9px;color:#888}
+.ios-settings-content h4{font-size:8px;letter-spacing:.65px;color:#74747a;font-weight:600;margin:15px 4px 6px}
+.ios-settings-group{overflow:hidden;border-radius:10px;background:#fff;margin-bottom:13px}
+.ios-settings-row{min-height:43px;width:100%;display:flex;align-items:center;gap:9px;padding:7px 10px;border:0;border-bottom:1px solid #e8e8ec;background:#fff;color:#1c1c1e;text-align:left}
+.ios-settings-row:last-child{border-bottom:0}
+button.ios-settings-row{cursor:pointer}
+.ios-settings-icon{width:23px;height:23px;flex:0 0 23px;border-radius:6px;display:grid;place-items:center;background:#8e8e93;color:#fff}
+.ios-settings-icon svg{width:14px;height:14px}
+.ios-settings-icon.orange{background:#ff9f0a}.ios-settings-icon.blue{background:#087ff5}.ios-settings-icon.purple{background:#7764d8}.ios-settings-icon.green{background:#34c759}
+.ios-settings-label{font-size:10px;flex:1;white-space:nowrap}
+.ios-settings-detail{font-size:9px;color:#8b8b91;white-space:nowrap}
+.ios-settings-row>svg:last-child{color:#b5b5ba}
+.ios-switch{width:34px;height:20px;flex:0 0 34px;padding:2px;border:0;border-radius:20px;background:#d1d1d6;cursor:pointer;transition:background .16s}
+.ios-switch span{display:block;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px #0003;transition:transform .16s}
+.ios-switch.is-on{background:#34c759}
+.ios-switch.is-on span{transform:translateX(14px)}
+.ios-settings-preview{min-height:125px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#7d7d84;text-align:center}
+.ios-settings-preview strong{font-size:13px;color:#222}
+.ios-settings-preview span{font-size:9px;max-width:210px;line-height:1.5}
+.ios-brightness-control{display:flex;align-items:center;gap:10px;padding:13px;color:#777}
+.ios-brightness-control input{flex:1;accent-color:#8e8e93}
+.ios-settings-footnote{font-size:8px;line-height:1.5;color:#85858c;margin:6px 5px 14px}
+.ios-settings-about{display:flex;align-items:center;flex-direction:column;gap:6px;padding:22px;color:#7d7d84}
+.ios-settings-about strong{font-size:13px;color:#222}
+.ios-settings-about span{font-size:9px}
