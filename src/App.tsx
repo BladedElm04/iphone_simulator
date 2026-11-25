@@ -38,7 +38,7 @@ function StatusBar({
       <span>{time}</span>
       <div className="status-icons">
         <Wifi size={15} className={wifi ? "" : "system-icon-muted"} />
-        {batteryPercentage && <span>{batteryLevel === null ? "—" : `${batteryLevel}%`}</span>}
+        {batteryPercentage && batteryLevel !== null && <span>{batteryLevel}%</span>}
         <Battery size={18} />
       </div>
     </div>
@@ -60,6 +60,8 @@ export default function App() {
   const [now, setNow] = useState(() => new Date());
   const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
   const [islandExpanded, setIslandExpanded] = useState(false);
+  const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
+  const [recentApps, setRecentApps] = useState<AppId[]>([]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -128,7 +130,14 @@ export default function App() {
 
   const openApp = (id: AppId) => {
     setActiveApp(id);
+    setRecentApps((current) => [id, ...current.filter((item) => item !== id)]);
     setControlCenter(false);
+    setAppSwitcherOpen(false);
+  };
+
+  const closeApp = (id: AppId) => {
+    setRecentApps((current) => current.filter((item) => item !== id));
+    if (activeApp === id) setActiveApp(null);
   };
 
   const activeName = apps.find((item) => item.id === activeApp)?.name;
@@ -181,8 +190,8 @@ export default function App() {
                   <span className="island-camera" />
                   {islandExpanded && (
                     <span className="island-content">
-                      <strong>{activeApp === "safari" ? "Safari" : "iPhone Simulator"}</strong>
-                      <small>{systemSettings.focus ? "Focus is on" : systemSettings.wifi ? "Wi-Fi enabled" : "Wi-Fi disabled"}</small>
+                      <strong>{activeApp === "music" ? "Now Playing" : activeApp === "safari" ? "Safari" : activeApp ? activeName : "No Live Activity"}</strong>
+                      <small>{activeApp ? "App is open" : "Activities will appear here"}</small>
                     </span>
                   )}
                 </button>
@@ -224,6 +233,33 @@ export default function App() {
                   </section>
                 )}
 
+                {appSwitcherOpen && (
+                  <section className="app-switcher">
+                    <header><strong>App Switcher</strong><button onClick={() => setAppSwitcherOpen(false)} aria-label="Close App Switcher"><X size={16} /></button></header>
+                    {recentApps.length === 0 ? (
+                      <p className="app-switcher-empty">No recently opened apps</p>
+                    ) : (
+                      <div className="app-switcher-cards">
+                        {recentApps.map((id) => {
+                          const item = apps.find((candidate) => candidate.id === id)!;
+                          const Icon = item.icon;
+                          return (
+                            <article className="app-switcher-card" key={id}>
+                              <button className="app-switcher-preview" onClick={() => openApp(id)}>
+                                <span className="app-switcher-card-icon" style={{ background: item.color }}><Icon size={22} /></span>
+                                <strong>{item.name}</strong>
+                                <small>{id === "safari" ? "Web browser" : id === "settings" ? "System settings" : "App preview"}</small>
+                              </button>
+                              <button className="app-switcher-close" onClick={() => closeApp(id)} aria-label={"Close " + item.name}><X size={13} /></button>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    )}
+                    <button className="app-switcher-home" onClick={() => { setActiveApp(null); setAppSwitcherOpen(false); }}>Home Screen</button>
+                  </section>
+                )}
+
                 {controlCenter && (
                   <section className="control-center">
                     <div className="control-heading"><strong>Control Center</strong><button onClick={() => setControlCenter(false)} aria-label="Close Control Center"><X size={16} /></button></div>
@@ -254,6 +290,7 @@ export default function App() {
         </section>
         <section className="inspector-section"><h3>Quick Actions</h3>
           <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>
+          <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setAppSwitcherOpen(true); }}><AppWindow size={16} />App Switcher</button>
           <button className="control-button" onClick={() => setOrientation((value) => value === "portrait" ? "landscape" : "portrait")}><Smartphone size={16} />Rotate Device</button>
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
           <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setIslandExpanded(false); setLocked(false); }}><AppWindow size={16} />Go to Home Screen</button>
