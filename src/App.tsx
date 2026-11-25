@@ -1,15 +1,16 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import {
   Activity, AppWindow, Battery, Bluetooth, Camera, ChevronLeft, Compass,
-  Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
+  Folder, Globe, Image, Lock, Map, MessageCircle, Music2, Phone,
   Settings, Smartphone, Timer, Wifi, X
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
 import { SettingsApp } from "./features/settings/SettingsApp";
 import type { SystemSettingsState } from "./features/settings/SettingsApp";
+import { NativeApps } from "./features/native/NativeApps";
 
-type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music";
+type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music" | "maps";
 
 const apps: { id: AppId; name: string; icon: typeof Globe; color: string }[] = [
   { id: "safari", name: "Safari", icon: Compass, color: "linear-gradient(145deg,#64d5ff,#0878d1)" },
@@ -19,7 +20,8 @@ const apps: { id: AppId; name: string; icon: typeof Globe; color: string }[] = [
   { id: "settings", name: "Settings", icon: Settings, color: "linear-gradient(145deg,#aeb7c2,#58616e)" },
   { id: "files", name: "Files", icon: Folder, color: "linear-gradient(145deg,#6fc9ff,#2874d7)" },
   { id: "phone", name: "Phone", icon: Phone, color: "linear-gradient(145deg,#67e878,#12a83b)" },
-  { id: "music", name: "Music", icon: Music2, color: "linear-gradient(145deg,#ff7a91,#d91b42)" }
+  { id: "music", name: "Music", icon: Music2, color: "linear-gradient(145deg,#ff7a91,#d91b42)" },
+  { id: "maps", name: "Maps", icon: Map, color: "linear-gradient(145deg,#8bd17c,#287c58)" }
 ];
 
 function StatusBar({
@@ -234,10 +236,7 @@ export default function App() {
                     ) : activeApp === "settings" ? (
                       <SettingsApp settings={systemSettings} onChange={updateSystemSetting} />
                     ) : (
-                      <div className="placeholder-app">
-                        <div className="placeholder-icon">{activeApp === "photos" ? <Image /> : activeApp === "files" ? <Folder /> : activeApp === "phone" ? <Phone /> : activeApp === "camera" ? <Camera /> : activeApp === "music" ? <Music2 /> : <MessageCircle />}</div>
-                        <h2>{activeName}</h2><p>This built-in app is part of the interface prototype.</p><span>More functionality is planned.</span>
-                      </div>
+                      <NativeApps app={activeApp} />
                     )}
                     <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />
                   </section>
