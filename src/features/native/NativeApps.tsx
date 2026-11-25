@@ -9,6 +9,7 @@ export type NativeAppId = "photos" | "files" | "phone" | "messages" | "camera" |
 interface NativeAppsProps {
   app: NativeAppId;
   dark: boolean;
+  volume: number;
 }
 
 interface LocalAsset {
@@ -27,7 +28,7 @@ interface ChatMessage {
 
 const formatTime = () => new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date());
 
-export function NativeApps({ app, dark }: NativeAppsProps) {
+export function NativeApps({ app, dark, volume }: NativeAppsProps) {
   const [assets, setAssets] = useState<LocalAsset[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, text: "Welcome to the iPhone Simulator. This is a local demo conversation.", time: formatTime(), outgoing: false }
@@ -60,6 +61,10 @@ export function NativeApps({ app, dark }: NativeAppsProps) {
       setCameraReady(false);
     }
   }, [app]);
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume / 100;
+  }, [volume, selectedAudio]);
 
   useEffect(() => {
     if (cameraReady && videoRef.current && streamRef.current) {
