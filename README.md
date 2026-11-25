@@ -10,7 +10,7 @@ An open-source, Windows-first desktop client for managing mobile web previews an
 
 - iPhone-inspired device preview and desktop workspace
 - Interactive home screen, app placeholders, Control Center, and lock-screen preview
-- Embedded website preview (not Safari or WebKit)
+- Safari screen backed by a real WebKit engine (Playwright) in the desktop app, with a clearly labelled Chromium fallback
 - Provider-neutral runtime contracts and capability catalog
 - Planned Apple Simulator, Appetize, and BrowserStack integrations
 
@@ -27,12 +27,21 @@ The current device shell is a visual interface preview. It must not be treated a
 
 A Simulator-built `.app` and a device `.ipa` are different artifacts. Neither can be launched directly by Windows or WSL as a native iOS application.
 
+## WebKit engine
+
+In the Electron desktop app the Safari screen renders pages with Playwright WebKit at the selected iPhone's logical viewport, scale factor, and user agent, with touch, scroll, and keyboard input. This is the WebKit engine, not iOS Safari. See [WebKit Fidelity](docs/WEBKIT_FIDELITY.md) for what is and is not reproduced.
+
+```bash
+pnpm setup:webkit
+pnpm exec playwright install-deps webkit   # WSL / Linux only
+```
+
 ## Tech stack
 
 - React, TypeScript, and Vite
 - Electron for the desktop shell
 - pnpm
-- Playwright planned for web-preview automation
+- Playwright WebKit for the Safari engine
 
 ## Requirements
 
