@@ -222,7 +222,7 @@ export default function App() {
         </div>
 
         <div className="device-area">
-          <div className={`device-frame ${orientation}`} style={{ width: orientation === "portrait" ? 302 : 625, "--device-aspect-ratio": orientation === "portrait" ? `${profile.width} / ${profile.height}` : `${profile.height} / ${profile.width}` } as CSSProperties}>
+          <div className={`device-frame ${orientation} model-${profile.id}`} style={{ width: orientation === "portrait" ? 302 : 625, "--device-aspect-ratio": orientation === "portrait" ? `${profile.width} / ${profile.height}` : `${profile.height} / ${profile.width}` } as CSSProperties}>
             <div className="device-bezel">
               <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }} onPointerDown={handleScreenPointerDown} onPointerUp={handleScreenPointerUp}>
                 <div className="wallpaper" />
