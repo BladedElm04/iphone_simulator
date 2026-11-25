@@ -229,7 +229,7 @@ export default function App() {
                 <StatusBar
                   time={timeLabel}
                   batteryPercentage={systemSettings.batteryPercentage}
-                  batteryLevel={batteryLevel}
+                  batteryLevel={batteryLevel ?? 100}
                   wifi={systemSettings.wifi && !systemSettings.airplaneMode}
                 />
                 {profile.hasDynamicIsland ? <button
