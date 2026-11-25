@@ -238,9 +238,7 @@ export default function App() {
                       <SafariApp profile={profile} orientation={orientation} />
                     ) : activeApp === "settings" ? (
                       <SettingsApp settings={systemSettings} onChange={updateSystemSetting} />
-                    ) : (
-                      <NativeApps app={activeApp} />
-                    )}
+                    ) : null}
                     <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />
                   </section>
                 )}
