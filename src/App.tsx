@@ -1,15 +1,11 @@
 import { useState } from "react";
-import type { ComponentType, HTMLAttributes } from "react";
 import {
   Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
-  ExternalLink, Folder, Globe, Image, Lock, MessageCircle, Music2, Phone, Search,
+  Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
   Settings, Smartphone, Wifi, X
 } from "lucide-react";
-
-type ElectronWebviewProps = HTMLAttributes<HTMLElement> & { src: string; partition: string; webpreferences: string };
-const ElectronWebview = "webview" as unknown as ComponentType<ElectronWebviewProps>;
-
-const isDesktopElectron = Boolean((window as Window & { desktopRuntime?: { isElectron: boolean } }).desktopRuntime?.isElectron);
+import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
+import { SafariApp } from "./features/safari/SafariApp";
 
 type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music";
 
@@ -45,39 +41,16 @@ function AppIcon({ item, onOpen }: { item: typeof apps[number]; onOpen: () => vo
 
 export default function App() {
   const [activeApp, setActiveApp] = useState<AppId | null>(null);
-  const [address, setAddress] = useState("https://example.com");
-  const [device, setDevice] = useState("iPhone 16 Pro");
+  const [device, setDevice] = useState(defaultDeviceName);
+  const profile = getDeviceProfile(device);
   const [controlCenter, setControlCenter] = useState(false);
   const [locked, setLocked] = useState(false);
   const [deviceMenu, setDeviceMenu] = useState(false);
-  const [browserUrl, setBrowserUrl] = useState("https://example.com");
-  const [browserReloadKey, setBrowserReloadKey] = useState(0);
   const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
 
   const openApp = (id: AppId) => {
     setActiveApp(id);
     setControlCenter(false);
-  };
-
-  const navigate = () => {
-    const input = address.trim();
-    if (!input) return;
-
-    const isWebAddress = /^(https?:\/\/)?(localhost|[\w-]+\.)+[a-z]{2,}([:/?#].*)?$/i.test(input)
-      || /^https?:\/\//i.test(input)
-      || /^localhost([:/].*)?$/i.test(input);
-
-    const target = isWebAddress
-      ? (/^https?:\/\//i.test(input) ? input : `https://${input}`)
-      : `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-
-    setAddress(target);
-    setBrowserUrl(target);
-    setBrowserReloadKey((value) => value + 1);
-  };
-
-  const openWebsiteInBrowser = () => {
-    window.open(browserUrl, "_blank", "noopener,noreferrer");
   };
 
   const activeName = apps.find((item) => item.id === activeApp)?.name;
@@ -93,7 +66,7 @@ export default function App() {
             <Smartphone size={14} />{device}<span className="chevron">⌄</span>
           </button>
           {deviceMenu && <div className="device-menu">
-            {["iPhone 16 Pro", "iPhone 16", "iPhone 15 Pro", "iPhone 14"].map((name) => (
+            {deviceProfiles.map(({ name }) => (
               <button key={name} onClick={() => { setDevice(name); setDeviceMenu(false); }}>
                 {name}{device === name && <span>✓</span>}
               </button>
@@ -142,28 +115,7 @@ export default function App() {
                       <button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button>
                     </header>
                     {activeApp === "safari" ? (
-                      <div className="browser-app">
-                        <div className="browser-address"><Lock size={12} /><input value={address} onChange={(event) => setAddress(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") navigate(); }} aria-label="Website address" /><button onClick={navigate} aria-label="Go to website"><Search size={14} /></button><button onClick={() => setBrowserReloadKey((value) => value + 1)} aria-label="Reload website"><Activity size={14} /></button></div>
-                        <div className="browser-content">
-                          {isDesktopElectron ? (
-                            <ElectronWebview
-                              key={browserReloadKey}
-                              className="browser-viewport"
-                              src={browserUrl}
-                              partition="persist:iphone-simulator-browser"
-                              webpreferences="contextIsolation=yes,nodeIntegration=no,sandbox=yes"
-                            />
-                          ) : (
-                            <>
-                              <iframe key={browserReloadKey} className="browser-viewport" src={browserUrl} title="Website preview" />
-                              <div className="browser-note">
-                                <span>Some websites block embedded previews. You can still open the page in a regular browser tab.</span>
-                                <button onClick={openWebsiteInBrowser}><ExternalLink size={13} />Open website</button>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
+                      <SafariApp profile={profile} orientation={orientation} />
                     ) : (
                       <div className="placeholder-app">
                         <div className="placeholder-icon">{activeApp === "settings" ? <Settings /> : activeApp === "photos" ? <Image /> : activeApp === "files" ? <Folder /> : activeApp === "phone" ? <Phone /> : activeApp === "camera" ? <Camera /> : activeApp === "music" ? <Music2 /> : <MessageCircle />}</div>
