@@ -8,7 +8,7 @@ import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devi
 import { SafariApp } from "./features/safari/SafariApp";
 import { SettingsApp } from "./features/settings/SettingsApp";
 import type { SystemSettingsState } from "./features/settings/SettingsApp";
-import { NativeApps } from "./features/native/NativeApps";
+import { NativeApps, type NativeAppId } from "./features/native/NativeApps";
 
 type AppId = "safari" | "settings" | "photos" | "files" | "phone" | "messages" | "camera" | "music" | "maps";
 
@@ -152,7 +152,7 @@ export default function App() {
     if (activeApp === id) setActiveApp(null);
   };
 
-  const activeName = apps.find((item) => item.id === activeApp)?.name;
+  const activeName = apps.find((item) => item.id === activeApp)?.name;\n  const nativeAppIds: NativeAppId[] = ["photos", "files", "phone", "messages", "camera", "music", "maps"];\n  const nativeApp = activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? activeApp as NativeAppId : "photos";
 
   return (
     <main className="workspace">
@@ -227,7 +227,7 @@ export default function App() {
                   </div>
                 )}
 
-                {activeApp && (
+                <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>\n                  <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>\n                  <NativeApps app={nativeApp} />\n                  <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />\n                </div>\n\n                {activeApp && (
                   <section className="app-window">
                     <header className="app-window-header">
                       <button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button>
