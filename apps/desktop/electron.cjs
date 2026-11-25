@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, session } = require("electron");
 const path = require("node:path");
 const { createWebKitRuntime } = require("./webkit-runtime.cjs");
 
@@ -73,6 +73,11 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback, details) => {
+    const isMainWindow = mainWindow && !mainWindow.isDestroyed() && webContents === mainWindow.webContents;
+    const isCameraRequest = permission === "media" && details && Array.isArray(details.mediaTypes) && details.mediaTypes.includes("video");
+    callback(Boolean(isMainWindow && isCameraRequest));
+  });
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
