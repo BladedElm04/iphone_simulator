@@ -1,5 +1,6 @@
 export type RuntimeId =
   | "local-web-preview"
+  | "playwright-webkit"
   | "apple-simulator"
   | "appetize"
   | "browserstack"
