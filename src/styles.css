@@ -262,3 +262,21 @@ button.ios-settings-row{cursor:pointer}
 .screen{touch-action:pan-y}
 
 .native-app-host{position:absolute;z-index:7;inset:0;background:#f2f2f7;display:flex;flex-direction:column;color:#17171a}.native-app-host .native-app{flex:1;min-height:0}.native-app-host .app-home-indicator{z-index:12}
+
+
+.home-page-dots{position:absolute;left:0;right:0;bottom:99px;display:flex;justify-content:center;gap:6px}
+.home-page-dots button{width:5px;height:5px;padding:0;border:0;border-radius:50%;background:#ffffff70}
+.home-page-dots button.active{background:#fff;transform:scale(1.2)}
+.home-screen{touch-action:pan-y}
+.native-app.dark{background:#000;color:#f5f5f7}
+.native-app.dark .native-app-heading{background:#000;color:#f5f5f7}
+.native-app.dark .native-empty-state,.native-app.dark .native-location-card,.native-app.dark .messages-layout{background:#1c1c1e;color:#f5f5f7}
+.native-app.dark .native-empty-state strong,.native-app.dark .native-location-card strong,.native-app.dark .native-file-row strong{color:#f5f5f7}
+.native-app.dark .native-section-title,.native-app.dark .native-file-row,.native-app.dark .native-list-row{color:#b7b7bd;border-color:#38383a}
+.native-app.dark .messages-contact,.native-app.dark .message-composer{border-color:#38383a}
+.native-app.dark .message-composer input{background:#2c2c2e;border-color:#48484b;color:#fff}
+.native-app.dark .message-bubble.incoming{background:#38383d;color:#fff}
+.native-app.dark .phone-number{color:#f5f5f7}
+.native-app.dark .phone-keypad button,.native-app.dark .phone-actions button:last-child{background:#2c2c2e;color:#f5f5f7}
+.native-app.dark .maps-search{background:#2c2c2e;color:#fff}
+.native-app.dark .maps-search input{background:transparent;color:#fff}
