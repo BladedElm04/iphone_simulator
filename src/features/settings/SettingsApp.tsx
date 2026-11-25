@@ -1,7 +1,8 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import {
   BatteryFull, Bell, Bluetooth, ChevronLeft, ChevronRight, CircleUserRound,
-  Focus, Lock, Moon, Plane, Search, ShieldCheck, Smartphone, Sun, Wifi
+  Focus, Moon, Plane, Search, ShieldCheck, Smartphone, Sun, Wifi
 } from "lucide-react";
 
 export interface SystemSettingsState {
@@ -40,7 +41,7 @@ export function SettingsApp({ settings, onChange }: SettingsAppProps) {
   const [query, setQuery] = useState("");
 
   const goBack = () => setPage("main");
-  const row = (icon: React.ReactNode, title: string, detail: string, action: () => void) => (
+  const row = (icon: ReactNode, title: string, detail: string, action: () => void) => (
     <button className="ios-settings-row" onClick={action}>
       <span className="ios-settings-icon">{icon}</span>
       <span className="ios-settings-label">{title}</span>
@@ -48,14 +49,6 @@ export function SettingsApp({ settings, onChange }: SettingsAppProps) {
       <ChevronRight size={15} />
     </button>
   );
-  const toggleRow = (icon: React.ReactNode, title: string, value: boolean, key: keyof SystemSettingsState) => (
-    <div className="ios-settings-row">
-      <span className="ios-settings-icon">{icon}</span>
-      <span className="ios-settings-label">{title}</span>
-      <SettingSwitch checked={value} onChange={(next) => onChange(key, next as never)} />
-    </div>
-  );
-
   if (page === "display") {
     return (
       <div className="ios-settings-page">
