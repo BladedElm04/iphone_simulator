@@ -6,6 +6,8 @@
 - [x] Basic built-in app overlays
 - [x] Device model selector
 - [x] Lock screen and Control Center prototype
+- [x] Interactive Control Center connectivity and Focus toggles
+- [x] Interactive Settings app with connectivity, display, privacy, notifications, and device information
 
 ## 0.2 — Browser preview
 - [x] Embedded website preview
@@ -13,7 +15,7 @@
 - [x] Portrait and landscape orientation controls
 - [x] Separate Electron Chromium webview for desktop navigation
 - [ ] Browser history and session isolation
-- [ ] Back/forward navigation and address synchronization
+- [x] Back/forward navigation and address synchronization
 - [x] Device viewport profiles
 - [x] WebKit engine via Playwright with Chromium fallback
 
@@ -48,7 +50,7 @@
 ## 0.7 — Developer tools
 - [ ] Playwright integration for web preview
 - [ ] Console and network inspection
-- [ ] Touch and keyboard controls
+- [x] Touch, scroll, and keyboard input forwarding
 - [ ] Screenshot capture and session recording
 
 ## 0.8 — Desktop distribution
