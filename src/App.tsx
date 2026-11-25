@@ -178,7 +178,7 @@ export default function App() {
         </div>
 
         <div className="device-area">
-          <div className={`device-frame ${orientation}`}>
+          <div className={`device-frame ${orientation}`} style={{ width: orientation === "portrait" ? 302 : 625, "--device-aspect-ratio": orientation === "portrait" ? `${profile.width} / ${profile.height}` : `${profile.height} / ${profile.width}` } as React.CSSProperties}>
             <div className="device-bezel">
               <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }}>
                 <div className="wallpaper" />
@@ -188,12 +188,11 @@ export default function App() {
                   batteryLevel={batteryLevel}
                   wifi={systemSettings.wifi && !systemSettings.airplaneMode}
                 />
-                <button
+                {profile.hasDynamicIsland ? <button
                   className={`dynamic-island${islandExpanded && timerEndsAt !== null ? " expanded" : ""}${timerEndsAt !== null ? " has-activity" : ""}`}
                   onClick={() => { if (timerEndsAt !== null) setIslandExpanded((value) => !value); }}
                   aria-label={timerEndsAt !== null ? "Show timer activity" : "Dynamic Island"}
                   aria-expanded={islandExpanded && timerEndsAt !== null}
-                  disabled={timerEndsAt === null}
                 >
                   <span className="island-camera" />
                   {timerEndsAt !== null && (
@@ -205,7 +204,7 @@ export default function App() {
                       </span>
                     </span>
                   )}
-                </button>
+                </button> : <div className="device-notch" aria-hidden="true" />}
 
                 {locked ? (
                   <div className="lock-screen" onClick={() => setLocked(false)}>
