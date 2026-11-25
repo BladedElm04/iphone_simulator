@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
@@ -22,11 +22,26 @@ const apps: { id: AppId; name: string; icon: typeof Globe; color: string }[] = [
   { id: "music", name: "Music", icon: Music2, color: "linear-gradient(145deg,#ff7a91,#d91b42)" }
 ];
 
-function StatusBar({ batteryPercentage }: { batteryPercentage: boolean }) {
+function StatusBar({
+  time,
+  batteryPercentage,
+  batteryLevel,
+  wifi
+}: {
+  time: string;
+  batteryPercentage: boolean;
+  batteryLevel: number | null;
+  wifi: boolean;
+}) {
   return (
     <div className="status-bar">
-      <span>9:41</span>
-      <div className="status-icons"><Activity size={13} /><Wifi size={15} />{batteryPercentage && <span>100%</span>}<BatteryFull size={18} /></div>
+      <span>{time}</span>
+      <div className="status-icons">
+        <Activity size={13} />
+        <Wifi size={15} className={wifi ? "" : "system-icon-muted"} />
+        {batteryPercentage && <span>{batteryLevel === null ? "—" : `${batteryLevel}%`}</span>}
+        <BatteryFull size={18} />
+      </div>
     </div>
   );
 }
@@ -43,6 +58,47 @@ function AppIcon({ item, onOpen }: { item: typeof apps[number]; onOpen: () => vo
 
 export default function App() {
   const [activeApp, setActiveApp] = useState<AppId | null>(null);
+  const [now, setNow] = useState(() => new Date());
+  const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
+  const [islandExpanded, setIslandExpanded] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    type BatteryManagerLike = EventTarget & { level: number };
+    const batteryNavigator = navigator as Navigator & {
+      getBattery?: () => Promise<BatteryManagerLike>;
+    };
+    if (!batteryNavigator.getBattery) return;
+
+    let battery: BatteryManagerLike | null = null;
+    const updateBattery = () => {
+      if (battery) setBatteryLevel(Math.round(battery.level * 100));
+    };
+
+    void batteryNavigator.getBattery().then((result) => {
+      battery = result;
+      updateBattery();
+      battery.addEventListener("levelchange", updateBattery);
+    }).catch(() => setBatteryLevel(null));
+
+    return () => {
+      battery?.removeEventListener("levelchange", updateBattery);
+    };
+  }, []);
+
+  const timeLabel = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(now);
+  const dateLabel = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  }).format(now);
   const [device, setDevice] = useState(defaultDeviceName);
   const profile = getDeviceProfile(device);
   const [controlCenter, setControlCenter] = useState(false);
@@ -111,19 +167,37 @@ export default function App() {
             <div className="device-bezel">
               <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }}>
                 <div className="wallpaper" />
-                <StatusBar batteryPercentage={systemSettings.batteryPercentage} />
-                <button className="dynamic-island" onClick={() => setControlCenter(!controlCenter)} aria-label="Toggle Control Center"><span /></button>
+                <StatusBar
+                  time={timeLabel}
+                  batteryPercentage={systemSettings.batteryPercentage}
+                  batteryLevel={batteryLevel}
+                  wifi={systemSettings.wifi && !systemSettings.airplaneMode}
+                />
+                <button
+                  className={`dynamic-island${islandExpanded ? " expanded" : ""}`}
+                  onClick={() => setIslandExpanded((value) => !value)}
+                  aria-label="Toggle Dynamic Island"
+                  aria-expanded={islandExpanded}
+                >
+                  <span className="island-camera" />
+                  {islandExpanded && (
+                    <span className="island-content">
+                      <strong>{activeApp === "safari" ? "Safari" : "iPhone Simulator"}</strong>
+                      <small>{systemSettings.focus ? "Focus is on" : systemSettings.wifi ? "Wi-Fi connected" : "Wi-Fi off"}</small>
+                    </span>
+                  )}
+                </button>
 
                 {locked ? (
                   <div className="lock-screen" onClick={() => setLocked(false)}>
-                    <span>Tuesday, November 24</span><strong>9:41</strong><small>Tap to unlock</small>
+                    <span>{dateLabel}</span><strong>{timeLabel}</strong><small>Tap to unlock</small>
                   </div>
                 ) : (
                   <div className="home-screen">
-                    <div className="home-date"><span>Tuesday, November 24</span><strong>9:41</strong></div>
+                    <div className="home-date"><span>{dateLabel}</span><strong>{timeLabel}</strong></div>
                     <div className="widget-row">
-                      <div className="weather-widget"><span>WEATHER</span><strong>22°</strong><small>Partly cloudy</small><b>☀</b></div>
-                      <div className="calendar-widget"><span>TUE</span><strong>24</strong><small>No events today</small></div>
+                      <div className="weather-widget system-widget"><span>CONNECTIVITY</span><strong>{systemSettings.wifi && !systemSettings.airplaneMode ? "Wi-Fi" : "Offline"}</strong><small>{systemSettings.bluetooth ? "Bluetooth on" : "Bluetooth off"}</small><b><Wifi size={20} /></b></div>
+                      <div className="calendar-widget"><span>{new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(now).toUpperCase()}</span><strong>{now.getDate()}</strong><small>{systemSettings.focus ? "Focus enabled" : "No focus active"}</small></div>
                     </div>
                     <div className="app-grid">{apps.map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
                     <div className="dock">{apps.slice(0, 4).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
@@ -160,10 +234,10 @@ export default function App() {
   <button className={systemSettings.focus ? "active" : ""} onClick={() => updateSystemSetting("focus", !systemSettings.focus)}><Activity />Focus<span>{systemSettings.focus ? "On" : "Off"}</span></button>
   <button className={systemSettings.airplaneMode ? "active" : ""} onClick={() => updateSystemSetting("airplaneMode", !systemSettings.airplaneMode)}><Smartphone />Airplane Mode<span>{systemSettings.airplaneMode ? "On" : "Off"}</span></button>
 </div>
-                    <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setActiveApp(null); }}>Lock Device</button>
+                    <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
                   </section>
                 )}
-                <button className="home-indicator" onClick={() => { setActiveApp(null); setControlCenter(false); }} aria-label="Return to Home" />
+                <button className="home-indicator" onClick={() => { setActiveApp(null); setControlCenter(false); setIslandExpanded(false); }} aria-label="Return to Home" />
               </div>
             </div>
           </div>
@@ -183,7 +257,7 @@ export default function App() {
           <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>
           <button className="control-button" onClick={() => setOrientation((value) => value === "portrait" ? "landscape" : "portrait")}><Smartphone size={16} />Rotate Device</button>
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
-          <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setLocked(false); }}><AppWindow size={16} />Go to Home Screen</button>
+          <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setIslandExpanded(false); setLocked(false); }}><AppWindow size={16} />Go to Home Screen</button>
         </section>
         <section className="inspector-section"><h3>Runtime Status</h3><div className="runtime-status"><span className="online-dot" />Preview running</div><p>This preview does not boot iOS or execute native iOS apps. Connect a supported runtime to test real applications.</p></section>
         <footer className="inspector-footer"><span>iPhone Simulator</span><span>Build 0.1.0</span></footer>
