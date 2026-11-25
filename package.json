@@ -13,10 +13,12 @@
     "build:web": "tsc --noEmit && vite build",
     "build:desktop": "pnpm build:web && electron-builder",
     "preview": "vite preview --host 0.0.0.0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "setup:webkit": "playwright install webkit"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",
+    "playwright": "^1.49.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -48,5 +50,11 @@
         "nsis"
       ]
     }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
   }
 }
