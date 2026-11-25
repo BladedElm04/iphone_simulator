@@ -8,6 +8,7 @@ export type NativeAppId = "photos" | "files" | "phone" | "messages" | "camera" |
 
 interface NativeAppsProps {
   app: NativeAppId;
+  dark: boolean;
 }
 
 interface LocalAsset {
@@ -51,6 +52,14 @@ export function NativeApps({ app, dark }: NativeAppsProps) {
     assetUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
     assetUrlsRef.current.clear();
   }, []);
+
+  useEffect(() => {
+    if (app !== "camera" && streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+      setCameraReady(false);
+    }
+  }, [app]);
 
   useEffect(() => {
     if (cameraReady && videoRef.current && streamRef.current) {
