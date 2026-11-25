@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
-  Settings, Smartphone, Wifi, X
+  Settings, Signal, Smartphone, Wifi, X
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
@@ -37,7 +37,7 @@ function StatusBar({
     <div className="status-bar">
       <span>{time}</span>
       <div className="status-icons">
-        <Activity size={13} />
+        <Signal size={15} />
         <Wifi size={15} className={wifi ? "" : "system-icon-muted"} />
         {batteryPercentage && <span>{batteryLevel === null ? "—" : `${batteryLevel}%`}</span>}
         <BatteryFull size={18} />
