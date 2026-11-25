@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  Activity, AppWindow, BatteryFull, Bluetooth, Camera, ChevronLeft, Compass,
+  Activity, AppWindow, Battery, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, MessageCircle, Music2, Phone,
-  Settings, Signal, Smartphone, Wifi, X
+  Settings, Smartphone, Wifi, X
 } from "lucide-react";
 import { defaultDeviceName, deviceProfiles, getDeviceProfile } from "./core/devices/profiles";
 import { SafariApp } from "./features/safari/SafariApp";
@@ -37,10 +37,9 @@ function StatusBar({
     <div className="status-bar">
       <span>{time}</span>
       <div className="status-icons">
-        <Signal size={15} />
         <Wifi size={15} className={wifi ? "" : "system-icon-muted"} />
         {batteryPercentage && <span>{batteryLevel === null ? "—" : `${batteryLevel}%`}</span>}
-        <BatteryFull size={18} />
+        <Battery size={18} />
       </div>
     </div>
   );
@@ -183,7 +182,7 @@ export default function App() {
                   {islandExpanded && (
                     <span className="island-content">
                       <strong>{activeApp === "safari" ? "Safari" : "iPhone Simulator"}</strong>
-                      <small>{systemSettings.focus ? "Focus is on" : systemSettings.wifi ? "Wi-Fi connected" : "Wi-Fi off"}</small>
+                      <small>{systemSettings.focus ? "Focus is on" : systemSettings.wifi ? "Wi-Fi enabled" : "Wi-Fi disabled"}</small>
                     </span>
                   )}
                 </button>
