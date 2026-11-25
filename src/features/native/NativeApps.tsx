@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Camera, FileText, Image as ImageIcon, MapPin, MessageCircle, Music2,
+  Camera, FileText, Image as ImageIcon, MapPin, Music2,
   Phone, Play, Pause, Plus, Search, Send, Trash2, Upload, Video
 } from "lucide-react";
 
