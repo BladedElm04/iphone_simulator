@@ -102,7 +102,11 @@ export default function App() {
   const timerSeconds = timerEndsAt === null ? 0 : Math.max(0, Math.ceil((timerEndsAt - now.getTime()) / 1000));
   const timerLabel = `${Math.floor(timerSeconds / 60)}:${String(timerSeconds % 60).padStart(2, "0")}`;
   useEffect(() => {
-    if (timerEndsAt !== null && timerSeconds === 0) setTimerEndsAt(null);
+    if (timerEndsAt !== null && timerSeconds === 0) {
+      setTimerEndsAt(null);
+      setIslandExpanded(false);
+      setNotifications((current) => [{ id: Date.now(), title: "Timer", body: "Your timer has finished.", time: "Now" }, ...current]);
+    }
   }, [timerEndsAt, timerSeconds]);
 
   const timeLabel = new Intl.DateTimeFormat("en-US", {
@@ -120,16 +124,19 @@ export default function App() {
   const [locked, setLocked] = useState(false);
   const [deviceMenu, setDeviceMenu] = useState(false);
   const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
-  const [systemSettings, setSystemSettings] = useState<SystemSettingsState>({
-    airplaneMode: false,
-    wifi: true,
-    bluetooth: true,
-    focus: false,
-    darkAppearance: true,
-    locationServices: true,
-    batteryPercentage: true,
-    brightness: 80
+  const [systemSettings, setSystemSettings] = useState<SystemSettingsState>(() => {
+    const defaults: SystemSettingsState = { airplaneMode: false, wifi: true, bluetooth: true, focus: false, darkAppearance: true, locationServices: true, batteryPercentage: true, brightness: 80 };
+    try {
+      const saved = window.localStorage.getItem("iphone-simulator-settings");
+      return saved ? { ...defaults, ...JSON.parse(saved) as Partial<SystemSettingsState> } : defaults;
+    } catch {
+      return defaults;
+    }
   });
+
+  useEffect(() => {
+    try { window.localStorage.setItem("iphone-simulator-settings", JSON.stringify(systemSettings)); } catch { /* Storage may be unavailable in restricted environments. */ }
+  }, [systemSettings]);
 
   const updateSystemSetting = <K extends keyof SystemSettingsState>(key: K, value: SystemSettingsState[K]) => {
     setSystemSettings((current) => {
@@ -140,6 +147,32 @@ export default function App() {
       }
       return next;
     });
+  };
+
+  const handleScreenPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const y = event.clientY - rect.top;
+    screenGesture.current = y <= 24 ? { x: event.clientX - rect.left, y, edge: "top" } : y >= rect.height - 18 ? { x: event.clientX - rect.left, y, edge: "bottom" } : null;
+  };
+
+  const handleScreenPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const start = screenGesture.current;
+    screenGesture.current = null;
+    if (!start) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const deltaY = event.clientY - rect.top - start.y;
+    if (start.edge === "top" && deltaY > 35) {
+      if (start.x > rect.width * 0.55) setControlCenter(true);
+      else setNotificationCenter(true);
+      setAppSwitcherOpen(false);
+    } else if (start.edge === "bottom" && deltaY < -35) {
+      setAppSwitcherOpen(true);
+      setNotificationCenter(false);
+      setControlCenter(false);
+    } else if (start.edge === "top" && deltaY < -35) {
+      setNotificationCenter(false);
+      setControlCenter(false);
+    }
   };
 
   const openApp = (id: AppId) => {
