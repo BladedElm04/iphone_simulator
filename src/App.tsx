@@ -63,7 +63,9 @@ export default function App() {
   const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
   const [islandExpanded, setIslandExpanded] = useState(false);
   const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
-  const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);\n  const [homePage, setHomePage] = useState(0);\n  const homeSwipe = useRef<number | null>(null);
+  const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
+  const [homePage, setHomePage] = useState(0);
+  const homeSwipe = useRef<number | null>(null);
   const [recentApps, setRecentApps] = useState<AppId[]>([]);
   const [notificationCenter, setNotificationCenter] = useState(false);
   const [notifications, setNotifications] = useState<{ id: number; title: string; body: string; time: string }[]>([]);
@@ -152,7 +154,9 @@ export default function App() {
     if (activeApp === id) setActiveApp(null);
   };
 
-  const activeName = apps.find((item) => item.id === activeApp)?.name;\n  const nativeAppIds: NativeAppId[] = ["photos", "files", "phone", "messages", "camera", "music", "maps"];\n  const nativeApp = activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? activeApp as NativeAppId : "photos";
+  const activeName = apps.find((item) => item.id === activeApp)?.name;
+  const nativeAppIds: NativeAppId[] = ["photos", "files", "phone", "messages", "camera", "music", "maps"];
+  const nativeApp = activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? activeApp as NativeAppId : "photos";
 
   return (
     <main className="workspace">
@@ -222,12 +226,19 @@ export default function App() {
                       <div className="weather-widget system-widget"><span>CONNECTIVITY</span><strong>{systemSettings.wifi && !systemSettings.airplaneMode ? "Wi-Fi" : "Offline"}</strong><small>{systemSettings.bluetooth ? "Bluetooth on" : "Bluetooth off"}</small><b><Wifi size={20} /></b></div>
                       <div className="calendar-widget"><span>{new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(now).toUpperCase()}</span><strong>{now.getDate()}</strong><small>{systemSettings.focus ? "Focus enabled" : "No focus active"}</small></div>
                     </div>
-                    <div className="app-grid">{apps.slice(homePage * 8, homePage * 8 + 8).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>\n                    <div className="home-page-dots">{[0, 1].map((page) => <button key={page} className={homePage === page ? "active" : ""} onClick={() => setHomePage(page)} aria-label={`Home page ${page + 1}`} />)}</div>
+                    <div className="app-grid">{apps.slice(homePage * 8, homePage * 8 + 8).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
+                    <div className="home-page-dots">{[0, 1].map((page) => <button key={page} className={homePage === page ? "active" : ""} onClick={() => setHomePage(page)} aria-label={`Home page ${page + 1}`} />)}</div>
                     <div className="dock">{apps.slice(0, 4).map((item) => <AppIcon key={item.id} item={item} onOpen={() => openApp(item.id)} />)}</div>
                   </div>
                 )}
 
-                <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>\n                  <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>\n                  <NativeApps app={nativeApp} dark={systemSettings.darkAppearance} />\n                  <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />\n                </div>\n\n                {activeApp && (
+                <div className="native-app-host" style={{ display: activeApp && nativeAppIds.includes(activeApp as NativeAppId) ? "flex" : "none" }}>
+                  <header className="app-window-header"><button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button><strong>{activeName}</strong><button onClick={() => setActiveApp(null)} aria-label="Close app"><X size={17} /></button></header>
+                  <NativeApps app={nativeApp} dark={systemSettings.darkAppearance} />
+                  <button className="app-home-indicator" onClick={() => setActiveApp(null)} aria-label="Return to Home" />
+                </div>
+
+                {(activeApp === "safari" || activeApp === "settings") && (
                   <section className="app-window">
                     <header className="app-window-header">
                       <button onClick={() => setActiveApp(null)} aria-label="Back to Home"><ChevronLeft size={18} /></button>
@@ -270,7 +281,15 @@ export default function App() {
                   </section>
                 )}
 
-                {notificationCenter && (\n                  <section className="notification-center">\n                    <header><strong>Notification Center</strong><button onClick={() => setNotificationCenter(false)} aria-label="Close Notification Center"><X size={16} /></button></header>\n                    {notifications.length === 0 ? <div className="notification-empty"><Bell size={25} /><strong>No Notifications</strong><span>New notifications will appear here</span></div> : notifications.map((item) => <article className="notification-card" key={item.id}><div><Bell size={14} /><strong>{item.title}</strong><small>{item.time}</small></div><p>{item.body}</p></article>)}\n                    {notifications.length > 0 && <button className="clear-notifications" onClick={() => setNotifications([])}>Clear All</button>}\n                  </section>\n                )}\n\n                {controlCenter && (
+                {notificationCenter && (
+                  <section className="notification-center">
+                    <header><strong>Notification Center</strong><button onClick={() => setNotificationCenter(false)} aria-label="Close Notification Center"><X size={16} /></button></header>
+                    {notifications.length === 0 ? <div className="notification-empty"><Bell size={25} /><strong>No Notifications</strong><span>New notifications will appear here</span></div> : notifications.map((item) => <article className="notification-card" key={item.id}><div><Bell size={14} /><strong>{item.title}</strong><small>{item.time}</small></div><p>{item.body}</p></article>)}
+                    {notifications.length > 0 && <button className="clear-notifications" onClick={() => setNotifications([])}>Clear All</button>}
+                  </section>
+                )}
+
+                {controlCenter && (
                   <section className="control-center">
                     <div className="control-heading"><strong>Control Center</strong><button onClick={() => setControlCenter(false)} aria-label="Close Control Center"><X size={16} /></button></div>
                     <div className="control-grid">
@@ -285,7 +304,8 @@ export default function App() {
                       ) : (
                         <button className="lock-button" onClick={() => { setTimerEndsAt(null); setIslandExpanded(false); }}>Stop Timer</button>
                       )}
-                      <label className="control-brightness"><Sun size={15} /><input aria-label="Display brightness" type="range" min="10" max="100" value={systemSettings.brightness} onChange={(event) => updateSystemSetting("brightness", Number(event.target.value))} /></label>\n                      <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
+                      <label className="control-brightness"><Sun size={15} /><input aria-label="Display brightness" type="range" min="10" max="100" value={systemSettings.brightness} onChange={(event) => updateSystemSetting("brightness", Number(event.target.value))} /></label>
+                      <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
                     </div>
                   </section>
                 )}
@@ -306,7 +326,8 @@ export default function App() {
           <div className="detail-row"><span>Display scale</span><strong>100%</strong></div>
         </section>
         <section className="inspector-section"><h3>Quick Actions</h3>
-          <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>\n          <button className="control-button" onClick={() => { setNotificationCenter(!notificationCenter); setControlCenter(false); }}><Bell size={16} />Notifications</button>
+          <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>
+          <button className="control-button" onClick={() => { setNotificationCenter(!notificationCenter); setControlCenter(false); }}><Bell size={16} />Notifications</button>
           <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setAppSwitcherOpen(true); }}><AppWindow size={16} />App Switcher</button>
           <button className="control-button" onClick={() => setOrientation((value) => value === "portrait" ? "landscape" : "portrait")}><Smartphone size={16} />Rotate Device</button>
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
