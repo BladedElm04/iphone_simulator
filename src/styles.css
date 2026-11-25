@@ -129,3 +129,5 @@ button.ios-settings-row{cursor:pointer}
 .system-widget strong{font-size:18px!important}
 @keyframes island-open{from{transform:translateX(-50%) scale(.88)}to{transform:translateX(-50%) scale(1)}}
 @keyframes island-content-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+.dynamic-island{z-index:12}
