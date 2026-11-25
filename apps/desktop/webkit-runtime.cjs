@@ -54,9 +54,22 @@ function createWebKitRuntime({ onFrame, onState }) {
   }
 
   async function publishState() {
-    if (!page || !browser) return;
-    const title = await page.title().catch(() => "");
-    onState({ url: page.url(), title, engineVersion: browser.version() });
+    const currentPage = page;
+    const currentBrowser = browser;
+    if (!currentPage || !currentBrowser || currentPage.isClosed()) return;
+
+    try {
+      const title = await currentPage.title().catch(() => "");
+      // A navigation or teardown may replace the page while title() is pending.
+      if (page !== currentPage || browser !== currentBrowser || currentPage.isClosed()) return;
+      onState({
+        url: currentPage.url(),
+        title,
+        engineVersion: currentBrowser.version()
+      });
+    } catch {
+      // Ignore state updates from pages that are closing or being replaced.
+    }
   }
 
   function beginCapture() {
