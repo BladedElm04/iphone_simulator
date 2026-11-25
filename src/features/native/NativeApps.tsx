@@ -26,7 +26,7 @@ interface ChatMessage {
 
 const formatTime = () => new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date());
 
-export function NativeApps({ app }: NativeAppsProps) {
+export function NativeApps({ app, dark }: NativeAppsProps) {
   const [assets, setAssets] = useState<LocalAsset[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, text: "Welcome to the iPhone Simulator. This is a local demo conversation.", time: formatTime(), outgoing: false }
@@ -124,7 +124,7 @@ export function NativeApps({ app }: NativeAppsProps) {
   }[app];
 
   return (
-    <div className={`native-app native-app-${app}`}>
+    <div className={`native-app native-app-${app}${dark ? " dark" : ""}`}>
       <header className="native-app-heading"><h2>{title}</h2>{app === "photos" || app === "files" || app === "music" ? (
         <button className="native-icon-button" onClick={() => fileInputRef.current?.click()} aria-label="Import files"><Plus size={18} /></button>
       ) : null}</header>
