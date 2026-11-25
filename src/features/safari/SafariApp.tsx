@@ -151,7 +151,7 @@ export function SafariApp({ profile, orientation }: SafariAppProps) {
     if (!current.dragging || now - current.lastSentAt < SCROLL_INTERVAL_MS) return;
     const to = toPage(event.clientX, event.clientY);
     const from = toPage(current.lastX, current.lastY);
-    void bridge.input({ type: "scroll", x: to.x, y: to.y, dx: from.x - to.x, dy: from.y - to.y });
+    void bridge.input({ type: "drag", x: from.x, y: from.y, dx: to.x - from.x, dy: to.y - from.y });
     current.lastX = event.clientX;
     current.lastY = event.clientY;
     current.lastSentAt = now;
