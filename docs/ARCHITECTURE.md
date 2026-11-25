@@ -29,6 +29,7 @@ A provider must report unsupported capabilities explicitly. In particular, App S
 
 | Provider | Purpose | Platform / constraints |
 |---|---|---|
+| Playwright WebKit | Real WebKit engine with iPhone viewport and touch input | Windows, Linux; not the iOS port |
 | Local Web Preview | Responsive website preview | Windows, Linux, macOS; not native iOS |
 | Apple Simulator | Execute Simulator-compatible builds | macOS + Xcode required |
 | Appetize | Hosted iOS Simulator sessions | Provider plan and supported build format apply |
