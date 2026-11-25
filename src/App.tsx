@@ -1,6 +1,6 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import {
-  Activity, AppWindow, Battery, Bluetooth, Camera, ChevronLeft, Compass,
+  Activity, AppWindow, Battery, Bell, Bluetooth, Camera, ChevronLeft, Compass,
   Folder, Globe, Image, Lock, Map, MessageCircle, Music2, Phone,
   Settings, Smartphone, Timer, Wifi, X
 } from "lucide-react";
@@ -65,6 +65,9 @@ export default function App() {
   const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
   const [appSwitcherOpen, setAppSwitcherOpen] = useState(false);
   const [recentApps, setRecentApps] = useState<AppId[]>([]);
+  const [notificationCenter, setNotificationCenter] = useState(false);
+  const [notifications, setNotifications] = useState<{ id: number; title: string; body: string; time: string }[]>([]);
+  const screenGesture = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -182,7 +185,7 @@ export default function App() {
         <div className="device-area">
           <div className={`device-frame ${orientation}`} style={{ width: orientation === "portrait" ? 302 : 625, "--device-aspect-ratio": orientation === "portrait" ? `${profile.width} / ${profile.height}` : `${profile.height} / ${profile.width}` } as CSSProperties}>
             <div className="device-bezel">
-              <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }}>
+              <div className="screen" style={{ filter: `brightness(${systemSettings.brightness}%)` }} onPointerDown={handleScreenPointerDown} onPointerUp={handleScreenPointerUp}>
                 <div className="wallpaper" />
                 <StatusBar
                   time={timeLabel}
@@ -269,7 +272,7 @@ export default function App() {
                   </section>
                 )}
 
-                {controlCenter && (
+                {notificationCenter && (\n                  <section className="notification-center">\n                    <header><strong>Notification Center</strong><button onClick={() => setNotificationCenter(false)} aria-label="Close Notification Center"><X size={16} /></button></header>\n                    {notifications.length === 0 ? <div className="notification-empty"><Bell size={25} /><strong>No Notifications</strong><span>New notifications will appear here</span></div> : notifications.map((item) => <article className="notification-card" key={item.id}><div><Bell size={14} /><strong>{item.title}</strong><small>{item.time}</small></div><p>{item.body}</p></article>)}\n                    {notifications.length > 0 && <button className="clear-notifications" onClick={() => setNotifications([])}>Clear All</button>}\n                  </section>\n                )}\n\n                {controlCenter && (
                   <section className="control-center">
                     <div className="control-heading"><strong>Control Center</strong><button onClick={() => setControlCenter(false)} aria-label="Close Control Center"><X size={16} /></button></div>
                     <div className="control-grid">
@@ -280,11 +283,11 @@ export default function App() {
 </div>
                     <div className="control-actions">
                       {timerEndsAt === null ? (
-                        <button className="lock-button" onClick={() => { setTimerEndsAt(Date.now() + 60000); setIslandExpanded(true); }}> <Timer size={14} /> Start 1-minute timer</button>
+                        <button className="lock-button" onClick={() => { setTimerEndsAt(Date.now() + 60000); setIslandExpanded(true); setNotifications((current) => [{ id: Date.now(), title: "Timer", body: "A 1-minute timer has started.", time: "Now" }, ...current]); }}> <Timer size={14} /> Start 1-minute timer</button>
                       ) : (
                         <button className="lock-button" onClick={() => { setTimerEndsAt(null); setIslandExpanded(false); }}>Stop Timer</button>
                       )}
-                      <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
+                      <label className="control-brightness"><Sun size={15} /><input aria-label="Display brightness" type="range" min="10" max="100" value={systemSettings.brightness} onChange={(event) => updateSystemSetting("brightness", Number(event.target.value))} /></label>\n                      <button className="lock-button" onClick={() => { setLocked(true); setControlCenter(false); setIslandExpanded(false); setActiveApp(null); }}>Lock Device</button>
                     </div>
                   </section>
                 )}
@@ -305,7 +308,7 @@ export default function App() {
           <div className="detail-row"><span>Display scale</span><strong>100%</strong></div>
         </section>
         <section className="inspector-section"><h3>Quick Actions</h3>
-          <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>
+          <button className="control-button" onClick={() => setControlCenter(!controlCenter)}><Activity size={16} />Control Center</button>\n          <button className="control-button" onClick={() => { setNotificationCenter(!notificationCenter); setControlCenter(false); }}><Bell size={16} />Notifications</button>
           <button className="control-button" onClick={() => { setActiveApp(null); setControlCenter(false); setAppSwitcherOpen(true); }}><AppWindow size={16} />App Switcher</button>
           <button className="control-button" onClick={() => setOrientation((value) => value === "portrait" ? "landscape" : "portrait")}><Smartphone size={16} />Rotate Device</button>
           <button className="control-button" onClick={() => { setLocked(!locked); setActiveApp(null); }}><Lock size={16} />{locked ? "Unlock Device" : "Lock Device"}</button>
