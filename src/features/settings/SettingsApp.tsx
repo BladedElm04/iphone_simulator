@@ -51,7 +51,7 @@ export function SettingsApp({ settings, onChange }: SettingsAppProps) {
   );
   if (page === "display") {
     return (
-      <div className="ios-settings-page">
+      <div className={`ios-settings-page ${settings.darkAppearance ? "dark" : ""}`}>
         <header className="ios-settings-nav"><button onClick={goBack}><ChevronLeft size={17} />Settings</button><strong>Display & Brightness</strong><span /></header>
         <div className="ios-settings-content">
           <div className="ios-settings-preview"><Sun size={24} /><strong>Display</strong><span>Adjust the screen appearance and brightness.</span></div>
